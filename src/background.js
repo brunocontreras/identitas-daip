@@ -1,11 +1,19 @@
 "use strict";
 
-import { app, protocol, BrowserWindow } from "electron";
+import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import {
   createProtocol,
   installVueDevtools
 } from "vue-cli-plugin-electron-builder/lib";
+import { autoUpdater } from "electron-updater";
+import log from "electron-log";
+
 const isDevelopment = process.env.NODE_ENV !== "production";
+
+// Log
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = "info";
+log.info("App starting...");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -62,6 +70,7 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -78,3 +87,41 @@ if (isDevelopment) {
     });
   }
 }
+
+function sendStatusToWindow(text) {
+  log.info(text);
+  win.webContents.send("message", text);
+}
+
+autoUpdater.on("checking-for-update", () => {
+  sendStatusToWindow("Checking for update...");
+});
+autoUpdater.on("update-available", () => {
+  sendStatusToWindow("Update available.");
+});
+autoUpdater.on("update-not-available", () => {
+  sendStatusToWindow("Update not available.");
+});
+autoUpdater.on("error", err => {
+  sendStatusToWindow("Error in auto-updater. " + err);
+});
+autoUpdater.on("download-progress", progressObj => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + " - Downloaded " + progressObj.percent + "%";
+  log_message =
+    log_message +
+    " (" +
+    progressObj.transferred +
+    "/" +
+    progressObj.total +
+    ")";
+  sendStatusToWindow(log_message);
+});
+autoUpdater.on("update-downloaded", () => {
+  sendStatusToWindow("Update downloaded");
+  win.webContents.send("downloaded");
+});
+
+ipcMain.on("update", () => {
+  autoUpdater.quitAndInstall();
+});

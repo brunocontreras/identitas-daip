@@ -13,6 +13,8 @@
   },
   "main": "background.js",
   "dependencies": {
+    "electron-log": "^3.0.4",
+    "electron-updater": "^4.0.6",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
