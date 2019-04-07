@@ -14,7 +14,6 @@
 import { remote } from "electron";
 import { mapActions } from "vuex";
 export default {
-  name: "AppSelectFolder",
   props: {
     isActive: Boolean
   },

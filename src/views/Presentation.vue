@@ -3,13 +3,12 @@
     <vue-displacement-slideshow
       ref="slideshow"
       :images="images"
-      displacement="@/assets/displacement.png"
-      :intensity="0.5"
-      :speed-in="0.75"
-      :speed-out="0.75"
+      :displacement="require('@/assets/displacement.png')"
+      :intensity="0.2"
+      :speed-in="1.4"
+      :speed-out="1.4"
       ease="Expo.easeInOut"
-    >
-    </vue-displacement-slideshow>
+    />
     <md-button class="button md-raised md-primary" @click="playVideo">Show video</md-button>
     <vue-plyr v-if="showVideo" class="video">
       <video :src="video"></video>
@@ -35,11 +34,14 @@ export default {
   }),
   computed: {
     ...mapState(["data"]),
+    presentation() {
+      return this.data.presentations.find(x => x.id === parseInt(this.id));
+    },
     images() {
-      return this.data.presentations[this.id].slides;
+      return this.presentation.slides;
     },
     video() {
-      return this.data.videos[this.data.presentations[this.id].videos[0]].path;
+      return this.presentation.videos[0].path;
     }
   },
   mounted() {

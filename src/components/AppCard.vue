@@ -7,7 +7,6 @@
 
 <script>
 export default {
-  name: "AppCard",
   props: {
     image: {
       type: String,

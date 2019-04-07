@@ -1,27 +1,27 @@
 <template>
-  <div v-if="course" class="section">
+  <div v-if="section" class="section">
     <md-button class="md-icon-button md-raised" @click="$router.go(-1)">
       <md-icon>arrow_back</md-icon>
     </md-button>
-    <span class="md-display-3">{{ course.name }}</span>
-    <div v-if="course.children">
+    <span class="md-display-3">{{ section.name }}</span>
+    <div v-if="section.children">
       <div class="grid">
         <md-card
-          v-for="presentation in course.children"
-          :key="presentation.name"
+          v-for="course in section.children"
+          :key="`course${course.id}`"
           md-with-hover
-          @click.native="goToPresentation(presentation)"
+          @click.native="goToCourse(course)"
         >
           <md-ripple>
-            <md-card-media>
-              <img class="image" :src="presentation.slides[0]" @load="onImageLoaded" />
-            </md-card-media>
             <md-card-header>
-              <div class="md-title">
-                {{ presentation.name }}
-              </div>
-              <div class="md-subhead">{{ presentation.slides.length }} diapositivas</div>
+              <div class="md-title">{{ course.name }}</div>
+              <div class="md-subhead">{{ course.children.length }} presentaciones</div>
             </md-card-header>
+            <md-card-content>
+              <md-avatar v-for="presentation in course.children" :key="`presentation${presentation.id}`">
+                <img class="image" :src="presentation.slides[0]" @load="onImageLoaded" />
+              </md-avatar>
+            </md-card-content>
           </md-ripple>
         </md-card>
       </div>
@@ -40,13 +40,13 @@ export default {
   },
   computed: {
     ...mapState(["data"]),
-    course() {
-      return this.data.courses.find(x => x.id === parseInt(this.id));
+    section() {
+      return this.data.sections.find(x => x.id === parseInt(this.id));
     }
   },
   methods: {
-    goToPresentation(presentation) {
-      this.$router.push(`/presentation/${presentation.id}`);
+    goToCourse(course) {
+      this.$router.push(`/course/${course.id}`);
     },
     onImageLoaded(event) {
       event.target.classList.add("image--show");

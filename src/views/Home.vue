@@ -8,29 +8,13 @@
     <app-select-folder :is-active="showFolderSelecter" />
     <div v-if="data" class="data-container">
       <app-card
-        image="experts.jpg"
-        :disabled="data.experts.disabled"
-        :section="data.experts.name"
-        @click="goTo('/section/experts', data.experts.disabled)"
-      ></app-card>
-      <app-card
-        image="family.jpg"
-        :disabled="data.family.disabled"
-        :section="data.family.name"
-        @click="goTo('/section/family', data.family.disabled)"
-      ></app-card>
-      <app-card
-        image="training.jpg"
-        :disabled="data.training.disabled"
-        :section="data.training.name"
-        @click="goTo('/section/training', data.training.disabled)"
-      ></app-card>
-      <app-card
-        image="conferences.jpg"
-        :disabled="data.conferences.disabled"
-        :section="data.conferences.name"
-        @click="goTo('/section/conferences', data.conferences.disabled)"
-      ></app-card>
+        v-for="course in data.root"
+        :key="course.name"
+        :image="course.image"
+        :disabled="course.disabled"
+        :section="course.name"
+        @click="goTo(course)"
+      />
       <!--
       <ul>
         <li v-for="(video, index) in data.videos" :key="video.id">
@@ -55,7 +39,6 @@ import AppVideoBackground from "@/components/AppVideoBackground";
 import AppSelectFolder from "@/components/AppSelectFolder";
 import AppCard from "@/components/AppCard";
 export default {
-  name: "Home",
   components: {
     AppVideoBackground,
     AppSelectFolder,
@@ -91,9 +74,12 @@ export default {
     onLoadingFinished() {
       this.isLoading = false;
     },
-    goTo(path, isDisabled) {
-      if (!isDisabled) {
-        this.$router.push(path);
+    goTo(course) {
+      if (!course.isDisabled) {
+        this.$router.push({
+          name: "section",
+          params: { id: course.id }
+        });
       }
     },
     update() {

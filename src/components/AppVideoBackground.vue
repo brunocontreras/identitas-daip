@@ -5,12 +5,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "AppVideoBackground"
-};
-</script>
-
 <style lang="scss" scoped>
 .video {
   height: 100vh;

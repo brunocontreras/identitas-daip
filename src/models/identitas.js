@@ -1,14 +1,8 @@
-import { lstatSync, readdirSync } from "fs";
 import { join } from "path";
+import { getDirectories, getFiles, isFile, isEqual, extractName } from "./helpers";
+import config from "./config";
 // import ffprobe from 'ffprobe'
 // import ffprobeStatic from 'ffprobe-static'
-
-const ROOT_DIRECTORIES = {
-  EXPERTS: "Expertos",
-  FAMILY: "Familia",
-  TRAINING: "Formación",
-  CONFERENCES: "Conferencias"
-};
 
 const PRESENTATION_DIRECTORIES = {
   AUDIOS: "Audios",
@@ -17,51 +11,37 @@ const PRESENTATION_DIRECTORIES = {
   SLIDES: "PowerPoint"
 };
 
-// Data
+const TYPES = {
+  SECTION: "Section",
+  COURSE: "Course",
+  PRESENTATION: "Presentation",
+  VIDEO: "Video",
+  AUDIO: "Audio"
+};
+
+let sectionId = 1;
+let courseId = 1;
+let presentationId = 1;
+let videoId = 1;
+let audioId = 1;
+
 const data = {
-  experts: {
-    name: ROOT_DIRECTORIES.EXPERTS,
-    disabled: true
-  },
-  family: {
-    name: ROOT_DIRECTORIES.FAMILY,
-    disabled: true
-  },
-  training: {
-    name: ROOT_DIRECTORIES.TRAINING,
-    disabled: true
-  },
-  conferences: {
-    name: ROOT_DIRECTORIES.CONFERENCES,
-    disabled: true
-  },
-  presentations: {},
-  videos: {},
-  audios: {}
+  root: config.map(x => ({
+    id: x.isCourse ? courseId++ : sectionId++,
+    name: x.name,
+    image: x.image,
+    parent: null,
+    disabled: true,
+    type: x.isCourse ? TYPES.COURSE : TYPES.SECTION
+  })),
+  sections: [],
+  courses: [],
+  presentations: [],
+  audios: [],
+  videos: []
 };
 
 const log = [];
-
-// Helpers
-const naturalCompare = (a, b) => {
-  let ax = [];
-  let bx = [];
-  a.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
-    ax.push([$1 || Infinity, $2 || ""]);
-  });
-  b.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
-    bx.push([$1 || Infinity, $2 || ""]);
-  });
-
-  while (ax.length && bx.length) {
-    const an = ax.shift();
-    const bn = bx.shift();
-    const nn = an[0] - bn[0] || an[1].localeCompare(bn[1]);
-    if (nn) return nn;
-  }
-
-  return ax.length - bx.length;
-};
 
 // const parseToMMSS = (text) => {
 //   const secNum = parseInt(text, 10)
@@ -78,31 +58,14 @@ const naturalCompare = (a, b) => {
 // Warnings
 const warningRootNoContent = () => log.push("La carpeta raíz no tiene contenido");
 const warningNoContent = breadCrumb => log.push(`La carpeta ${breadCrumb.join(" > ")} no tiene contenido`);
-const warningNoDirectory = directory => log.push(`No existe la carpeta '${directory}'`);
+// const warningNoDirectory = directory => log.push(`No existe la carpeta '${directory}'`);
 const warningNoSlides = name => log.push(`La presentación ${name} no tiene diapositivas`);
-const checkData = () => {
-  if (data.experts === undefined) warningNoDirectory(ROOT_DIRECTORIES.EXPERTS);
-  if (data.family === undefined) warningNoDirectory(ROOT_DIRECTORIES.FAMILY);
-  if (data.training === undefined) warningNoDirectory(ROOT_DIRECTORIES.TRAINING);
-  if (data.conferences === undefined) warningNoDirectory(ROOT_DIRECTORIES.CONFERENCES);
-};
-
-const isDirectory = path => lstatSync(path).isDirectory();
-const isFile = path => lstatSync(path).isFile();
-const getDirectories = path =>
-  readdirSync(path)
-    .filter(name => isDirectory(join(path, name)))
-    .sort(naturalCompare);
-const getFiles = path =>
-  readdirSync(path)
-    .filter(name => isFile(join(path, name)))
-    .sort(naturalCompare);
-
-const normalize = text => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const isEqual = (name1, name2) => normalize(name1.toLowerCase()) === normalize(name2.toLowerCase());
-const removeExtension = name => name.replace(/\.[^/.]+$/, "");
-const removeOrder = name => name.replace(/.*?(?=[a-z]|[A-Z])/, "");
-const extractName = name => removeExtension(removeOrder(name));
+// const checkData = () => {
+//   if (data.experts === undefined) warningNoDirectory(ROOT_DIRECTORIES.EXPERTS);
+//   if (data.family === undefined) warningNoDirectory(ROOT_DIRECTORIES.FAMILY);
+//   if (data.training === undefined) warningNoDirectory(ROOT_DIRECTORIES.TRAINING);
+//   if (data.conferences === undefined) warningNoDirectory(ROOT_DIRECTORIES.CONFERENCES);
+// };
 
 // const audioExtensions = Object.values(data.audios).map(x => x.path.slice(-4)).filter((value, index, self) => {
 //   return self.indexOf(value) === index
@@ -110,41 +73,36 @@ const extractName = name => removeExtension(removeOrder(name));
 // console.log(audioExtensions)
 
 // Constructores
-let presentationIdx = 0;
-const newPresentation = ({ path, name, breadCrumb }) => {
-  presentationIdx++;
-  const id = presentationIdx.toString();
-  const presentation = { id, path, name, breadCrumb };
-  data.presentations[id] = presentation;
+const newPresentation = ({ path, name, parent }) => {
+  const presentation = { id: presentationId++, path, name, parent, type: TYPES.PRESENTATION };
+  data.presentations.push(presentation);
   return presentation;
 };
 
-let videoIdx = 0;
-const newVideo = ({ path, name, breadCrumb }) => {
-  videoIdx++;
-  const id = videoIdx.toString();
-  const video = { id, path, name, breadCrumb };
-  data.videos[id] = video;
+const newVideo = ({ path, name, parent }) => {
+  const video = { id: videoId++, path, name, parent, type: TYPES.VIDEO };
+  data.videos.push(video);
   return video;
 };
 
-let audioIdx = 0;
-const newAudio = ({ path, lyricsDirPath, name, breadCrumb }) => {
-  audioIdx++;
-  const id = audioIdx.toString();
-  const audio = { id, path, name, breadCrumb };
-
+const newAudio = ({ path, lyricsDirPath, name, parent }) => {
+  const audio = { id: audioId++, path, name, parent, type: TYPES.AUDIO };
   const lyricsFile = `${name}.txt`;
   const lyricsPath = join(lyricsDirPath, lyricsFile);
   if (isFile(lyricsPath)) {
     audio.lyricsPath = lyricsPath;
   }
-
-  data.audios[id] = audio;
+  data.audios.push(audio);
   return audio;
 };
 
-const readAudioDir = ({ path, lyricsDirPath, breadCrumb }) => {
+const newCourse = ({ name, parent }) => {
+  const course = { id: courseId++, name, parent, type: TYPES.COURSE };
+  data.courses.push(course);
+  return course;
+};
+
+const readAudioDir = ({ path, lyricsDirPath, parent }) => {
   const files = getFiles(path);
   if (files) {
     return files.map(name => {
@@ -152,21 +110,21 @@ const readAudioDir = ({ path, lyricsDirPath, breadCrumb }) => {
         path: join(path, name),
         lyricsDirPath,
         name: extractName(name),
-        breadCrumb
+        parent
       });
-      return audio.id;
+      return audio;
     });
   }
 };
 
-const readVideoDir = ({ path, breadCrumb }) => {
+const readVideoDir = ({ path, parent }) => {
   const files = getFiles(path);
   if (files) {
     return files.map(name => {
       const video = newVideo({
         path: join(path, name),
         name: extractName(name),
-        breadCrumb
+        parent
       });
       // ffprobe(join(path, name), { path: ffprobeStatic.path })
       //   .then(info => {
@@ -175,7 +133,7 @@ const readVideoDir = ({ path, breadCrumb }) => {
       //   .catch(err => {
       //     console.error(err)
       //   })
-      return video.id;
+      return video;
     });
   }
 };
@@ -186,13 +144,13 @@ const readSlides = ({ path, name }) => {
   else return files.map(name => join(path, name));
 };
 
-const readPresentation = ({ path, name, breadCrumb }) => {
+const readPresentation = ({ path, name, parent }) => {
   const directories = getDirectories(path);
   if (!directories) {
-    warningNoContent(breadCrumb);
+    warningNoContent(parent.name);
     return [];
   } else {
-    const presentation = newPresentation({ path, name, breadCrumb });
+    const presentation = newPresentation({ path, name, parent });
     directories.forEach(name => {
       if (isEqual(PRESENTATION_DIRECTORIES.AUDIOS, name)) {
         const existsLyrics = directories.find(d => isEqual(PRESENTATION_DIRECTORIES.LYRICS, d));
@@ -200,57 +158,41 @@ const readPresentation = ({ path, name, breadCrumb }) => {
           path: join(path, name),
           lyricsDirPath: existsLyrics ? join(path, PRESENTATION_DIRECTORIES.LYRICS) : "",
           name,
-          breadCrumb: [...breadCrumb, name]
+          parent: presentation
         });
       }
       if (isEqual(PRESENTATION_DIRECTORIES.VIDEOS, name)) {
-        presentation.videos = readVideoDir({
-          path: join(path, name),
-          name,
-          breadCrumb: [...breadCrumb, name]
-        });
+        presentation.videos = readVideoDir({ path: join(path, name), name, parent: presentation });
       }
       if (isEqual(PRESENTATION_DIRECTORIES.SLIDES, name)) {
-        presentation.slides = readSlides({
-          path: join(path, name),
-          name
-        });
+        presentation.slides = readSlides({ path: join(path, name), name });
       }
     });
-    return presentation.id;
+    return presentation;
   }
 };
 
-const readPresentations = ({ path, breadCrumb }) => {
+const readPresentations = ({ path, parent }) => {
   const directories = getDirectories(path);
   if (!directories) {
-    warningNoContent(breadCrumb);
+    warningNoContent(parent.name);
     return [];
   } else {
-    return directories.map(name =>
-      readPresentation({
-        path: join(path, name),
-        name,
-        breadCrumb: [...breadCrumb, name]
-      })
-    );
+    return directories.map(name => readPresentation({ path: join(path, name), name, parent }));
   }
 };
 
-const readCourses = ({ path, breadCrumb }) => {
+const readCourses = ({ path, parent }) => {
   const directories = getDirectories(path);
   if (!directories) {
-    warningNoContent(breadCrumb);
+    warningNoContent(parent.name);
     return [];
   } else {
-    return directories.map(name => ({
-      name,
-      presentations: readPresentations({
-        path: join(path, name),
-        name,
-        breadCrumb: [...breadCrumb, name]
-      })
-    }));
+    return directories.map(name => {
+      const course = newCourse({ name, parent });
+      course.children = readPresentations({ path: join(path, name), parent: course });
+      return course;
+    });
   }
 };
 
@@ -260,40 +202,22 @@ const readRootDirectory = path => {
   if (!directories) warningRootNoContent();
   else {
     directories.forEach(name => {
-      const dirPath = join(path, name);
-      const breadCrumb = [name];
-      if (isEqual(ROOT_DIRECTORIES.EXPERTS, name)) {
-        data.experts.disabled = false;
-        data.experts.courses = readCourses({ path: dirPath, name, breadCrumb });
-      }
-      if (isEqual(ROOT_DIRECTORIES.FAMILY, name)) {
-        data.family.disabled = false;
-        data.family.courses = readCourses({ path: dirPath, name, breadCrumb });
-      }
-      if (isEqual(ROOT_DIRECTORIES.TRAINING, name)) {
-        data.training.disabled = true;
-        data.training.courses = readCourses({
-          path: dirPath,
-          name,
-          breadCrumb
-        });
-      }
-      if (isEqual(ROOT_DIRECTORIES.CONFERENCES, name)) {
-        data.conferences.disabled = true;
-        data.conferences.presentations = readPresentations({
-          path: dirPath,
-          name,
-          breadCrumb
-        });
+      const item = data.root.find(x => isEqual(x.name, name));
+      if (!item) return;
+
+      item.disabled = false;
+      const options = { path: join(path, name), parent: item };
+      if (item.type === TYPES.SECTION) {
+        data.sections.push(item);
+        item.children = readCourses(options);
+      } else {
+        data.courses.push(item);
+        item.children = readPresentations(options);
       }
     });
-    checkData();
-    console.timeEnd("identitas");
-    return {
-      data,
-      log
-    };
   }
+  console.timeEnd("identitas");
+  return { data, log };
 };
 
 export default readRootDirectory;
