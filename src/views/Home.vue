@@ -8,25 +8,25 @@
     <app-select-folder :is-active="showFolderSelecter" />
     <div v-if="data" class="data-container">
       <app-card
-        image-url="@/assets/experts.jpg"
+        image="experts.jpg"
         :disabled="data.experts.disabled"
         :section="data.experts.name"
         @click="goTo('/section/experts', data.experts.disabled)"
       ></app-card>
       <app-card
-        image-url="~@/assets/family.jpg"
+        image="family.jpg"
         :disabled="data.family.disabled"
         :section="data.family.name"
         @click="goTo('/section/family', data.family.disabled)"
       ></app-card>
       <app-card
-        image-url="~@/assets/training.jpg"
+        image="training.jpg"
         :disabled="data.training.disabled"
         :section="data.training.name"
         @click="goTo('/section/training', data.training.disabled)"
       ></app-card>
       <app-card
-        image-url="~@/assets/conferences.jpg"
+        image="conferences.jpg"
         :disabled="data.conferences.disabled"
         :section="data.conferences.name"
         @click="goTo('/section/conferences', data.conferences.disabled)"

@@ -1,6 +1,9 @@
 <template>
   <div class="card" :class="{ disabled }" @click="$emit('click')">
-    <div :style="{ backgroundImage: `url(${imageUrl})` }" class="image"></div>
+    <div
+      :style="{ backgroundImage: `url(${backgroundImage})` }"
+      class="image"
+    ></div>
     <h1 class="label">{{ section }}</h1>
   </div>
 </template>
@@ -9,7 +12,7 @@
 export default {
   name: "AppCard",
   props: {
-    imageUrl: {
+    image: {
       type: String,
       required: true
     },
@@ -20,6 +23,11 @@ export default {
     disabled: {
       type: Boolean,
       default: true
+    }
+  },
+  computed: {
+    backgroundImage() {
+      return require(`@/assets/${this.image}`);
     }
   }
 };
