@@ -1,9 +1,6 @@
 <template>
   <div class="card" :class="{ disabled }" @click="$emit('click')">
-    <div
-      :style="{ backgroundImage: `url(${backgroundImage})` }"
-      class="image"
-    ></div>
+    <div :style="{ backgroundImage: `url(${backgroundImage})` }" class="image"></div>
     <h1 class="label">{{ section }}</h1>
   </div>
 </template>

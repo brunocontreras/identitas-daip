@@ -1,14 +1,6 @@
 <template>
   <div>
-    <video
-      ref="video"
-      src="@/assets/bg_video.mp4"
-      autoplay
-      muted
-      class="video"
-      loop
-      @canplay="$emit('loaded')"
-    ></video>
+    <video ref="video" src="@/assets/bg_video.mp4" autoplay muted class="video" loop @canplay="$emit('loaded')"></video>
     <div class="video-mask"></div>
   </div>
 </template>

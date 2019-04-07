@@ -10,9 +10,7 @@
       ease="Expo.easeInOut"
     >
     </vue-displacement-slideshow>
-    <md-button class="button md-raised md-primary" @click="playVideo"
-      >Show video</md-button
-    >
+    <md-button class="button md-raised md-primary" @click="playVideo">Show video</md-button>
     <vue-plyr v-if="showVideo" class="video">
       <video :src="video"></video>
     </vue-plyr>

@@ -1,10 +1,7 @@
 "use strict";
 
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
-import {
-  createProtocol,
-  installVueDevtools
-} from "vue-cli-plugin-electron-builder/lib";
+import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 
@@ -118,13 +115,7 @@ autoUpdater.on("error", err => {
 autoUpdater.on("download-progress", progressObj => {
   let log_message = "Download speed: " + progressObj.bytesPerSecond;
   log_message = log_message + " - Downloaded " + progressObj.percent + "%";
-  log_message =
-    log_message +
-    " (" +
-    progressObj.transferred +
-    "/" +
-    progressObj.total +
-    ")";
+  log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
   sendStatusToWindow(log_message);
 });
 autoUpdater.on("update-downloaded", () => {

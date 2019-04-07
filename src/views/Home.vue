@@ -42,11 +42,7 @@
         </li>
       </ul> -->
     </div>
-    <div
-      class="loading"
-      :class="{ hide: videoLoaded }"
-      @transitionend="onLoadingFinished"
-    ></div>
+    <div class="loading" :class="{ hide: videoLoaded }" @transitionend="onLoadingFinished"></div>
   </div>
 </template>
 

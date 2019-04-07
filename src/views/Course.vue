@@ -6,29 +6,15 @@
     <span class="md-display-3">{{ section.name }}</span>
     <div v-if="section.courses">
       <div class="grid">
-        <md-card
-          v-for="(course, i) in section.courses"
-          :key="i"
-          md-with-hover
-          @click.native="goToCourse(course)"
-        >
+        <md-card v-for="(course, i) in section.courses" :key="i" md-with-hover @click.native="goToCourse(course)">
           <md-ripple>
             <md-card-header>
               <div class="md-title">{{ course.name }}</div>
-              <div class="md-subhead">
-                {{ course.presentations.length }} presentaciones
-              </div>
+              <div class="md-subhead">{{ course.presentations.length }} presentaciones</div>
             </md-card-header>
             <md-card-content>
-              <md-avatar
-                v-for="presentation in course.presentations"
-                :key="presentation"
-              >
-                <img
-                  class="image"
-                  :src="data.presentations[presentation].slides[0]"
-                  @load="onImageLoaded"
-                />
+              <md-avatar v-for="presentation in course.presentations" :key="presentation">
+                <img class="image" :src="data.presentations[presentation].slides[0]" @load="onImageLoaded" />
               </md-avatar>
             </md-card-content>
           </md-ripple>
@@ -45,11 +31,7 @@
         >
           <md-ripple>
             <md-card-media>
-              <img
-                class="image"
-                :src="data.presentations[presentation].slides[0]"
-                @load="onImageLoaded"
-              />
+              <img class="image" :src="data.presentations[presentation].slides[0]" @load="onImageLoaded" />
             </md-card-media>
             <md-card-header>
               <div class="md-title">

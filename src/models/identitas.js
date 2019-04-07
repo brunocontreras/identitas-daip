@@ -76,21 +76,15 @@ const naturalCompare = (a, b) => {
 // }
 
 // Warnings
-const warningRootNoContent = () =>
-  log.push("La carpeta raíz no tiene contenido");
-const warningNoContent = breadCrumb =>
-  log.push(`La carpeta ${breadCrumb.join(" > ")} no tiene contenido`);
-const warningNoDirectory = directory =>
-  log.push(`No existe la carpeta '${directory}'`);
-const warningNoSlides = name =>
-  log.push(`La presentación ${name} no tiene diapositivas`);
+const warningRootNoContent = () => log.push("La carpeta raíz no tiene contenido");
+const warningNoContent = breadCrumb => log.push(`La carpeta ${breadCrumb.join(" > ")} no tiene contenido`);
+const warningNoDirectory = directory => log.push(`No existe la carpeta '${directory}'`);
+const warningNoSlides = name => log.push(`La presentación ${name} no tiene diapositivas`);
 const checkData = () => {
   if (data.experts === undefined) warningNoDirectory(ROOT_DIRECTORIES.EXPERTS);
   if (data.family === undefined) warningNoDirectory(ROOT_DIRECTORIES.FAMILY);
-  if (data.training === undefined)
-    warningNoDirectory(ROOT_DIRECTORIES.TRAINING);
-  if (data.conferences === undefined)
-    warningNoDirectory(ROOT_DIRECTORIES.CONFERENCES);
+  if (data.training === undefined) warningNoDirectory(ROOT_DIRECTORIES.TRAINING);
+  if (data.conferences === undefined) warningNoDirectory(ROOT_DIRECTORIES.CONFERENCES);
 };
 
 const isDirectory = path => lstatSync(path).isDirectory();
@@ -105,8 +99,7 @@ const getFiles = path =>
     .sort(naturalCompare);
 
 const normalize = text => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const isEqual = (name1, name2) =>
-  normalize(name1.toLowerCase()) === normalize(name2.toLowerCase());
+const isEqual = (name1, name2) => normalize(name1.toLowerCase()) === normalize(name2.toLowerCase());
 const removeExtension = name => name.replace(/\.[^/.]+$/, "");
 const removeOrder = name => name.replace(/.*?(?=[a-z]|[A-Z])/, "");
 const extractName = name => removeExtension(removeOrder(name));
@@ -202,14 +195,10 @@ const readPresentation = ({ path, name, breadCrumb }) => {
     const presentation = newPresentation({ path, name, breadCrumb });
     directories.forEach(name => {
       if (isEqual(PRESENTATION_DIRECTORIES.AUDIOS, name)) {
-        const existsLyrics = directories.find(d =>
-          isEqual(PRESENTATION_DIRECTORIES.LYRICS, d)
-        );
+        const existsLyrics = directories.find(d => isEqual(PRESENTATION_DIRECTORIES.LYRICS, d));
         presentation.audios = readAudioDir({
           path: join(path, name),
-          lyricsDirPath: existsLyrics
-            ? join(path, PRESENTATION_DIRECTORIES.LYRICS)
-            : "",
+          lyricsDirPath: existsLyrics ? join(path, PRESENTATION_DIRECTORIES.LYRICS) : "",
           name,
           breadCrumb: [...breadCrumb, name]
         });
