@@ -31,7 +31,6 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  border: 10px solid red;
   width: 19vw;
   height: 15vw;
   position: relative;
