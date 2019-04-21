@@ -1,6 +1,5 @@
 <template>
   <div class="presentation" @keyup.right="next" @keyup.left="prev">
-    <app-breadcrumb :item="presentation" class="breadcrumb" />
     <vue-displacement-slideshow
       ref="slideshow"
       :images="images"
@@ -18,12 +17,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import AppBreadcrumb from "@/components/AppBreadcrumb";
+import { mapState, mapMutations } from "vuex";
 import VueDisplacementSlideshow from "vue-displacement-slideshow";
 export default {
   components: {
-    AppBreadcrumb,
     VueDisplacementSlideshow
   },
   props: {
@@ -38,7 +35,9 @@ export default {
   computed: {
     ...mapState(["data"]),
     presentation() {
-      return this.data.presentations.find(x => x.id === parseInt(this.id));
+      const presentation = this.data.presentations.find(x => x.id === parseInt(this.id));
+      this.SET_CURRENT(presentation);
+      return presentation;
     },
     images() {
       return this.presentation.slides;
@@ -59,6 +58,7 @@ export default {
     document.removeEventListener("keyup", this.keyupHandler);
   },
   methods: {
+    ...mapMutations(["SET_CURRENT"]),
     keyup(e) {
       if (e.keyCode === 37) this.prev();
       if (e.keyCode === 39) this.next();
@@ -76,15 +76,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .presentation {
   height: 100vh;
-}
-.breadcrumb {
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  z-index: 2;
 }
 .button {
   position: absolute;

@@ -1,18 +1,31 @@
 <template>
-  <div class="card" :class="{ disabled }" @click="$emit('click')">
-    <div :style="{ backgroundImage: `url(${backgroundImage})` }" class="image"></div>
-    <h1 class="label">{{ section }}</h1>
-  </div>
+  <md-card class="appcard" :class="{ disabled }" md-with-hover @click.native="$emit('click')">
+    <md-card-media>
+      <app-image :src="image" />
+    </md-card-media>
+    <md-card-header>
+      <div class="md-title">{{ title }}</div>
+      <div class="md-subhead">{{ subtitle }}</div>
+    </md-card-header>
+  </md-card>
 </template>
 
 <script>
+import AppImage from "@/components/AppImage";
 export default {
+  components: {
+    AppImage
+  },
   props: {
     image: {
       type: String,
       required: true
     },
-    section: {
+    title: {
+      type: String,
+      required: true
+    },
+    subtitle: {
       type: String,
       required: true
     },
@@ -20,49 +33,18 @@ export default {
       type: Boolean,
       default: true
     }
-  },
-  computed: {
-    backgroundImage() {
-      return require(`@/assets/${this.image}`);
-    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.card {
-  width: 19vw;
-  height: 15vw;
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-
-  &:not(.disabled) {
-    transition: transform 0.5s;
-    cursor: pointer;
-    &:hover {
-      transform: scale(1.2);
-    }
-  }
+.appcard {
+  flex-basis: 20vw;
+  min-width: 18vw;
+  margin: 2.5% 0;
+  overflow: hidden;
 }
 .disabled {
   filter: grayscale(100%);
-}
-.image {
-  background-size: cover;
-  background-position: 50%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: -1;
-}
-.label {
-  font-size: 3vw;
-  color: #fff;
-  margin-right: -0.75em;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
 }
 </style>

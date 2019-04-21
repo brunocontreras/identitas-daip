@@ -37,6 +37,12 @@ const removeExtension = name => name.replace(/\.[^/.]+$/, "");
 const removeOrder = name => name.replace(/.*?(?=[a-z]|[A-Z])/, "");
 const extractName = name => removeExtension(removeOrder(name));
 
+const plurals = (array, singular, plural) => {
+  if (array && array.length > 0) {
+    return array.length === 1 ? `${array.length} ${singular}` : `${array.length} ${plural}`;
+  } else return `0 ${plural}`;
+};
+
 export {
   naturalCompare,
   isDirectory,
@@ -47,5 +53,6 @@ export {
   isEqual,
   removeExtension,
   removeOrder,
-  extractName
+  extractName,
+  plurals
 };

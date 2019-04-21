@@ -1,8 +1,36 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div id="app" class="app">
+    <the-header class="header" />
+    <router-view class="main" />
   </div>
 </template>
+
+<script>
+import TheHeader from "@/components/TheHeader";
+export default {
+  components: {
+    TheHeader
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.header {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.main {
+  overflow: auto;
+}
+</style>
 
 <style>
 *,
@@ -11,7 +39,7 @@
   box-sizing: border-box;
 }
 html {
-  font-size: 62.5%;
+  font-size: 10px;
 }
 body {
   font-family: Roboto;
@@ -23,6 +51,9 @@ body {
 }
 input {
   font-family: inherit;
+}
+a {
+  color: #666 !important;
 }
 @font-face {
   font-family: "Roboto";

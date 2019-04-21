@@ -10,9 +10,10 @@
       <app-card
         v-for="section in data.root"
         :key="section.name"
-        :image="section.image"
+        :image="getSectionImage(section.image)"
         :disabled="section.disabled"
-        :section="section.name"
+        :title="section.name"
+        :subtitle="getSectionCourses(section)"
         @click="goTo(section)"
       />
       <!--
@@ -33,7 +34,8 @@
 <script>
 /* Logic */
 import { ipcRenderer } from "electron";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
+import { plurals } from "@/models/helpers";
 /* Components */
 import AppVideoBackground from "@/components/AppVideoBackground";
 import AppSelectFolder from "@/components/AppSelectFolder";
@@ -57,6 +59,7 @@ export default {
     }
   },
   created() {
+    this.SET_CURRENT(null);
     ipcRenderer.on("message", (event, text) => {
       this.message = text;
     });
@@ -67,6 +70,7 @@ export default {
     if (root && !this.data) this.READ_ROOT_DIRECTORY(root);
   },
   methods: {
+    ...mapMutations(["SET_CURRENT"]),
     ...mapActions(["READ_ROOT_DIRECTORY"]),
     onVideoLoaded() {
       this.videoLoaded = true;
@@ -75,7 +79,7 @@ export default {
       this.isLoading = false;
     },
     goTo(section) {
-      if (!section.isDisabled) {
+      if (!section.disabled) {
         this.$router.push({
           name: "section",
           params: { id: section.id }
@@ -84,12 +88,21 @@ export default {
     },
     update() {
       ipcRenderer.send("update");
+    },
+    getSectionImage(url) {
+      return require(`@/assets/${url}`);
+    },
+    getSectionCourses(section) {
+      return plurals(section.children, "curso", "cursos");
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.home {
+  height: 100%;
+}
 .message {
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 5px;
@@ -105,10 +118,9 @@ export default {
 }
 .data-container {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-  height: 100vh;
-  padding-bottom: 15vh;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
 }
 .loading {
   position: fixed;

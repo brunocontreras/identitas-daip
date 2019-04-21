@@ -7,11 +7,15 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     data: undefined,
+    current: undefined,
     log: undefined
   },
   mutations: {
     SET_DATA: (state, data) => {
       state.data = data;
+    },
+    SET_CURRENT: (state, current) => {
+      state.current = current;
     },
     SET_LOG: (state, log) => {
       state.log = log;

@@ -1,10 +1,6 @@
 <template>
   <div v-if="section" class="section">
-    <app-breadcrumb :item="section" />
-    <md-button class="md-icon-button md-raised" @click="$router.go(-1)">
-      <md-icon>arrow_back</md-icon>
-    </md-button>
-    <span class="md-display-3">{{ section.name }}</span>
+    <div class="md-display-1">{{ section.name }}</div>
     <div v-if="section.children">
       <div class="grid">
         <md-card
@@ -13,17 +9,15 @@
           md-with-hover
           @click.native="goToCourse(course)"
         >
-          <md-ripple>
-            <md-card-header>
-              <div class="md-title">{{ course.name }}</div>
-              <div class="md-subhead">{{ course.children.length }} presentaciones</div>
-            </md-card-header>
-            <md-card-content>
-              <md-avatar v-for="presentation in course.children" :key="`presentation${presentation.id}`">
-                <img class="image" :src="presentation.slides[0]" @load="onImageLoaded" />
-              </md-avatar>
-            </md-card-content>
-          </md-ripple>
+          <md-card-content>
+            <md-avatar v-for="presentation in course.children" :key="`presentation${presentation.id}`">
+              <app-image :src="presentation.slides[0]" />
+            </md-avatar>
+          </md-card-content>
+          <md-card-header>
+            <div class="md-title">{{ course.name }}</div>
+            <div class="md-subhead">{{ course.children.length }} presentaciones</div>
+          </md-card-header>
         </md-card>
       </div>
     </div>
@@ -31,11 +25,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import AppBreadcrumb from "@/components/AppBreadcrumb";
+import { mapState, mapMutations } from "vuex";
+import AppImage from "@/components/AppImage";
 export default {
   components: {
-    AppBreadcrumb
+    AppImage
   },
   props: {
     id: {
@@ -46,15 +40,15 @@ export default {
   computed: {
     ...mapState(["data"]),
     section() {
-      return this.data.sections.find(x => x.id === parseInt(this.id));
+      const section = this.data.sections.find(x => x.id === parseInt(this.id));
+      this.SET_CURRENT(section);
+      return section;
     }
   },
   methods: {
+    ...mapMutations(["SET_CURRENT"]),
     goToCourse(course) {
       this.$router.push(`/course/${course.id}`);
-    },
-    onImageLoaded(event) {
-      event.target.classList.add("image--show");
     }
   }
 };
@@ -64,18 +58,21 @@ export default {
 .section {
   padding: 2rem;
 }
+.md-display-1 {
+  text-align: center;
+  margin-top: 4rem;
+}
 .grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-evenly;
   align-items: stretch;
   overflow-y: auto;
 }
 .md-card {
   flex-basis: 20vw;
   min-width: 18vw;
-  margin: 2.5%;
-  margin-left: 0;
+  margin: 2.5% 0;
   overflow: hidden;
 }
 .md-subhead {
