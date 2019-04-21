@@ -8,12 +8,12 @@
     <app-select-folder :is-active="showFolderSelecter" />
     <div v-if="data" class="data-container">
       <app-card
-        v-for="course in data.root"
-        :key="course.name"
-        :image="course.image"
-        :disabled="course.disabled"
-        :section="course.name"
-        @click="goTo(course)"
+        v-for="section in data.root"
+        :key="section.name"
+        :image="section.image"
+        :disabled="section.disabled"
+        :section="section.name"
+        @click="goTo(section)"
       />
       <!--
       <ul>
@@ -74,11 +74,11 @@ export default {
     onLoadingFinished() {
       this.isLoading = false;
     },
-    goTo(course) {
-      if (!course.isDisabled) {
+    goTo(section) {
+      if (!section.isDisabled) {
         this.$router.push({
           name: "section",
-          params: { id: course.id }
+          params: { id: section.id }
         });
       }
     },

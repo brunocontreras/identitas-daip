@@ -1,5 +1,6 @@
 <template>
   <div class="presentation" @keyup.right="next" @keyup.left="prev">
+    <app-breadcrumb :item="presentation" class="breadcrumb" />
     <vue-displacement-slideshow
       ref="slideshow"
       :images="images"
@@ -18,9 +19,11 @@
 
 <script>
 import { mapState } from "vuex";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 import VueDisplacementSlideshow from "vue-displacement-slideshow";
 export default {
   components: {
+    AppBreadcrumb,
     VueDisplacementSlideshow
   },
   props: {
@@ -76,6 +79,12 @@ export default {
 <style>
 .presentation {
   height: 100vh;
+}
+.breadcrumb {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  z-index: 2;
 }
 .button {
   position: absolute;

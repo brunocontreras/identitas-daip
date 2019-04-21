@@ -1,6 +1,7 @@
 import { join } from "path";
 import { getDirectories, getFiles, isFile, isEqual, extractName } from "./helpers";
 import config from "./config";
+import { TYPES } from "./types";
 // import ffprobe from 'ffprobe'
 // import ffprobeStatic from 'ffprobe-static'
 
@@ -9,14 +10,6 @@ const PRESENTATION_DIRECTORIES = {
   LYRICS: "Letras",
   VIDEOS: "Vídeos",
   SLIDES: "PowerPoint"
-};
-
-const TYPES = {
-  SECTION: "Section",
-  COURSE: "Course",
-  PRESENTATION: "Presentation",
-  VIDEO: "Video",
-  AUDIO: "Audio"
 };
 
 let sectionId = 1;

@@ -1,5 +1,6 @@
 <template>
   <div v-if="section" class="section">
+    <app-breadcrumb :item="section" />
     <md-button class="md-icon-button md-raised" @click="$router.go(-1)">
       <md-icon>arrow_back</md-icon>
     </md-button>
@@ -31,7 +32,11 @@
 
 <script>
 import { mapState } from "vuex";
+import AppBreadcrumb from "@/components/AppBreadcrumb";
 export default {
+  components: {
+    AppBreadcrumb
+  },
   props: {
     id: {
       type: [Number, String],
