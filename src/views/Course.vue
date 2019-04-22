@@ -69,23 +69,7 @@ export default {
   justify-content: space-evenly;
   align-items: stretch;
 }
-.md-card {
-  flex-basis: 20vw;
-  min-width: 18vw;
-  margin: 2.5% 0;
-  overflow: hidden;
-}
-.md-subhead {
-  margin-top: 1rem;
-}
 .md-avatar {
   margin: 2px;
-}
-.image {
-  opacity: 0;
-  transition: opacity 0.25s;
-}
-.image--show {
-  opacity: 1;
 }
 </style>

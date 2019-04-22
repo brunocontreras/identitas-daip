@@ -42,11 +42,12 @@ html {
   font-size: 10px;
 }
 body {
+  background-color: #e0e0e0;
   font-family: Roboto;
   margin: 0;
   height: 100%;
   width: 100%;
-  /* overflow: hidden; */
+  overflow: hidden;
   font-size: 1.4rem;
 }
 input {
@@ -54,6 +55,13 @@ input {
 }
 a {
   color: #666 !important;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #666;
 }
 @font-face {
   font-family: "Roboto";

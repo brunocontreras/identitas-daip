@@ -111,4 +111,7 @@ export default {
   cursor: default !important;
   filter: grayscale(100%);
 }
+.md-subhead {
+  margin-top: 1rem;
+}
 </style>

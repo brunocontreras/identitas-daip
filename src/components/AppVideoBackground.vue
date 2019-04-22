@@ -7,16 +7,14 @@
 
 <style lang="scss" scoped>
 .video {
-  height: 100vh;
+  height: 100%;
   position: fixed;
-  z-index: -1;
   object-fit: cover;
 }
 .video-mask {
   background-image: radial-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
   position: fixed;
-  height: 100vh;
-  width: 100vw;
-  z-index: -1;
+  height: 100%;
+  width: 100%;
 }
 </style>
