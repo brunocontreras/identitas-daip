@@ -1,9 +1,6 @@
 <template>
-  <div class="appbreadcrumb">
-    <span v-for="(link, i) in links" :key="i">
-      <router-link :to="link.to">{{ link.name }}</router-link>
-      <span v-if="i < links.length - 1" class="dot"></span>
-    </span>
+  <div>
+    <slot :links="links" />
   </div>
 </template>
 
@@ -34,18 +31,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.appbreadcrumb {
-  font-size: 2.4rem;
-  font-weight: 400;
-}
-.dot {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  margin: 0 0.5em 3px;
-  border-radius: 50%;
-  background-color: #ccc;
-}
-</style>

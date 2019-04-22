@@ -49,7 +49,7 @@ export default {
         plurals(presentation.videos, "video", "videos"),
         plurals(presentation.audios, "audio", "audios")
       ];
-      return strings.join(" · ");
+      return strings.join(" / ");
     }
   }
 };
@@ -68,8 +68,5 @@ export default {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: stretch;
-}
-.md-avatar {
-  margin: 2px;
 }
 </style>
