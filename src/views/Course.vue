@@ -3,22 +3,14 @@
     <div class="md-display-1">{{ course.name }}</div>
     <div v-if="course.children">
       <div class="grid">
-        <md-card
+        <app-card
           v-for="presentation in course.children"
           :key="presentation.name"
-          md-with-hover
-          @click.native="goToPresentation(presentation)"
-        >
-          <md-card-media>
-            <app-image :src="presentation.slides[0]" />
-          </md-card-media>
-          <md-card-header>
-            <div class="md-title">
-              {{ presentation.name }}
-            </div>
-            <div class="md-subhead">{{ getSubtitle(presentation) }}</div>
-          </md-card-header>
-        </md-card>
+          :image="presentation.slides[0]"
+          :title="presentation.name"
+          :subtitle="getSubtitle(presentation)"
+          @click="goToPresentation(presentation)"
+        />
       </div>
     </div>
   </div>
@@ -27,10 +19,10 @@
 <script>
 import { mapState, mapMutations } from "vuex";
 import { plurals } from "@/models/helpers";
-import AppImage from "@/components/AppImage";
+import AppCard from "@/components/AppCard";
 export default {
   components: {
-    AppImage
+    AppCard
   },
   props: {
     id: {
@@ -76,7 +68,6 @@ export default {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: stretch;
-  overflow-y: auto;
 }
 .md-card {
   flex-basis: 20vw;

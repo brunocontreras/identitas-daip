@@ -67,7 +67,6 @@ export default {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: stretch;
-  overflow-y: auto;
 }
 .md-card {
   flex-basis: 20vw;

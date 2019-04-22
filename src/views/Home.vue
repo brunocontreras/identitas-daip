@@ -14,6 +14,7 @@
         :disabled="section.disabled"
         :title="section.name"
         :subtitle="getSectionCourses(section)"
+        :show-delay="true"
         @click="goTo(section)"
       />
       <!--

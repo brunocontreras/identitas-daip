@@ -1,7 +1,15 @@
 <template>
-  <md-card class="appcard" :class="{ disabled }" md-with-hover @click.native="$emit('click')">
+  <md-card
+    ref="appcard"
+    class="appcard"
+    :class="{ disabled }"
+    md-with-hover
+    @click.native="$emit('click')"
+    @mousemove.native="!disabled ? onMouseMove($event) : null"
+    @mouseleave.native="!disabled ? onMouseOut() : null"
+  >
     <md-card-media>
-      <app-image :src="image" />
+      <app-image :src="image" @loaded="onImageLoaded" />
     </md-card-media>
     <md-card-header>
       <div class="md-title">{{ title }}</div>
@@ -11,6 +19,7 @@
 </template>
 
 <script>
+import { TweenMax, Power1 } from "gsap";
 import AppImage from "@/components/AppImage";
 export default {
   components: {
@@ -31,7 +40,61 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: true
+      default: false
+    },
+    showDelay: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    el() {
+      return this.$refs.appcard.$el;
+    }
+  },
+  mounted() {
+    TweenMax.set(this.el, {
+      rotationY: 0,
+      rotationX: 0,
+      rotationZ: 0,
+      y: 100,
+      transformPerspective: 1000,
+      autoAlpha: 0
+    });
+  },
+  methods: {
+    onMouseMove(e) {
+      const { left, top, width, height } = this.el.getBoundingClientRect();
+      const x = e.pageX - left;
+      const y = e.pageY - top;
+      const px = x / width;
+      const py = y / height;
+      const xx = -15 + 30 * px;
+      const yy = 15 - 30 * py;
+      TweenMax.to(this.el, 0.5, {
+        rotationY: xx,
+        rotationX: yy,
+        rotationZ: 0,
+        transformPerspective: 1000,
+        ease: Power1.easeOut
+      });
+    },
+    onMouseOut() {
+      TweenMax.to(this.el, 0.5, {
+        rotationY: 0,
+        rotationX: 0,
+        rotationZ: 0,
+        transformPerspective: 1000,
+        ease: Power1.easeOut
+      });
+    },
+    onImageLoaded() {
+      TweenMax.to(this.el, 0.75, {
+        y: 0,
+        autoAlpha: 1,
+        delay: this.showDelay ? Math.random() * 0.5 + 1 : 0,
+        ease: Power1.Expo
+      });
     }
   }
 };
@@ -45,6 +108,7 @@ export default {
   overflow: hidden;
 }
 .disabled {
+  cursor: default !important;
   filter: grayscale(100%);
 }
 </style>

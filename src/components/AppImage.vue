@@ -1,5 +1,5 @@
 <template>
-  <img class="appimage" :class="{ 'appimage--loaded': loaded }" :src="src" @load="loaded = true" />
+  <img class="appimage" :class="{ 'appimage--loaded': loaded }" :src="src" @load="onLoad" />
 </template>
 
 <script>
@@ -11,8 +11,14 @@ export default {
     }
   },
   data: () => ({
-    loaded: false
-  })
+    loaded: true
+  }),
+  methods: {
+    onLoad() {
+      this.loaded = true;
+      this.$emit("loaded");
+    }
+  }
 };
 </script>
 
