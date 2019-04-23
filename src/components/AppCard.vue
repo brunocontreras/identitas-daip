@@ -57,7 +57,6 @@ export default {
       rotationY: 0,
       rotationX: 0,
       rotationZ: 0,
-      y: 100,
       transformPerspective: 1000,
       autoAlpha: 0
     });
@@ -89,12 +88,23 @@ export default {
       });
     },
     onImageLoaded() {
-      TweenMax.to(this.el, 0.75, {
-        y: 0,
-        autoAlpha: 1,
-        delay: this.showDelay ? Math.random() * 0.5 + 1 : 0,
-        ease: Power1.Expo
-      });
+      TweenMax.fromTo(
+        this.el,
+        0.75,
+        {
+          rotationX: -20,
+          rotationY: 20,
+          y: 150
+        },
+        {
+          y: 0,
+          autoAlpha: 1,
+          delay: this.showDelay ? Math.random() * 0.5 + 1 : 0,
+          rotationX: 0,
+          rotationY: 0,
+          ease: Power1.Expo
+        }
+      );
     }
   }
 };
