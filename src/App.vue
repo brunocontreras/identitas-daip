@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="app">
     <the-header class="header" />
-    <router-view class="main" />
+    <transition name="fade" mode="out-in">
+      <router-view class="main" />
+    </transition>
   </div>
 </template>
 
@@ -107,5 +109,13 @@ a {
   direction: ltr;
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
