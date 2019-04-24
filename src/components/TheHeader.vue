@@ -3,10 +3,12 @@
     <the-logo class="logo bc-link bc-link--logo" />
     <app-arrow class="arrow" />
     <app-breadcrumb v-if="current" v-slot="{ links }" class="breadcrumb" :item="current">
-      <router-link v-for="(link, i) in links" :key="i" class="bc-link" :to="link.to">
-        <span class="bc-link-name">{{ link.name }}</span>
-      </router-link>
-      <app-arrow class="arrow" />
+      <template v-for="(link, i) in links">
+        <router-link :key="`link${i}`" :to="link.to" class="bc-link">
+          <span class="bc-link-name">{{ link.name }}</span>
+        </router-link>
+        <app-arrow :key="`arrow${i}`" class="arrow" />
+      </template>
     </app-breadcrumb>
   </header>
 </template>
@@ -32,6 +34,7 @@ export default {
 .theheader {
   --border-color: #e0e0e0;
   --size: 80px;
+  --hover-bg-color: #333;
   height: var(--size);
   background-color: #fff;
   margin-top: 1px;
@@ -61,17 +64,30 @@ export default {
   padding: 2rem;
   font-size: 1.8rem;
   padding-left: 4rem;
-  margin-left: -2rem;
-  transition-duration: 0s;
+  margin-left: -15px;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+  transition-property: background-color, color;
+  &:hover {
+    background-color: var(--hover-bg-color);
+    color: #fff !important;
+    text-decoration: none;
+    + .arrow ::v-deep path {
+      fill: var(--hover-bg-color);
+    }
+  }
 }
 .bc-link-name {
   display: inline-block;
 }
-.arrow ::v-deep path {
+.arrow {
   position: relative;
   z-index: 1;
-  stroke: var(--border-color);
-  stroke-width: 1;
-  fill: #fff;
+  ::v-deep path {
+    stroke: var(--border-color);
+    stroke-width: 1;
+    fill: #fff;
+    transition: fill 0.25s;
+  }
 }
 </style>
