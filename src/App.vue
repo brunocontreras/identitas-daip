@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="app">
     <the-header class="header" />
-    <transition name="fade" mode="out-in">
-      <router-view class="main" />
-    </transition>
+    <!-- <transition name="fade" mode="out-in"> -->
+    <router-view class="main" />
+    <!-- </transition> -->
   </div>
 </template>
 
@@ -31,6 +31,7 @@ export default {
 }
 .main {
   overflow: auto;
+  flex-grow: 1;
 }
 </style>
 
@@ -44,7 +45,6 @@ html {
   font-size: 10px;
 }
 body {
-  background-color: #e0e0e0;
   font-family: Roboto;
   margin: 0;
   height: 100%;
@@ -59,11 +59,13 @@ a {
   color: #666 !important;
 }
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  background-color: #666;
+  border: 3px solid transparent;
+  box-shadow: inset 0 0 0 4px #fff;
 }
 @font-face {
   font-family: "Roboto";
@@ -110,12 +112,12 @@ a {
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }
-.fade-enter-active,
+/* .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.25s;
 }
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-}
+} */
 </style>
