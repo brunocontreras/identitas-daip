@@ -8,9 +8,12 @@
     @mousemove.native="!disabled ? onMouseMove($event) : null"
     @mouseleave.native="!disabled ? onMouseOut() : null"
   >
-    <md-card-media>
-      <app-image :src="image" @loaded="onImageLoaded" />
+    <md-card-media v-if="image">
+      <app-image :src="image" @loaded="show" />
     </md-card-media>
+    <md-card-content v-else>
+      <slot />
+    </md-card-content>
     <md-card-header>
       <div class="md-title">{{ title }}</div>
       <div class="md-subhead">{{ subtitle }}</div>
@@ -28,7 +31,7 @@ export default {
   props: {
     image: {
       type: String,
-      required: true
+      default: ""
     },
     title: {
       type: String,
@@ -42,7 +45,11 @@ export default {
       type: Boolean,
       default: false
     },
-    showDelay: {
+    initDelay: {
+      type: Boolean,
+      default: false
+    },
+    initAnimation: {
       type: Boolean,
       default: false
     }
@@ -53,13 +60,7 @@ export default {
     }
   },
   mounted() {
-    TweenMax.set(this.el, {
-      rotationY: 0,
-      rotationX: 0,
-      rotationZ: 0,
-      transformPerspective: 1000,
-      autoAlpha: 0
-    });
+    this.$slots.default ? this.show() : this.hide();
   },
   methods: {
     onMouseMove(e) {
@@ -87,24 +88,38 @@ export default {
         ease: Power1.easeOut
       });
     },
-    onImageLoaded() {
-      TweenMax.fromTo(
-        this.el,
-        0.75,
-        {
-          rotationX: -20,
-          rotationY: 20,
-          y: 150
-        },
-        {
-          y: 0,
-          autoAlpha: 1,
-          delay: this.showDelay ? Math.random() * 0.5 + 1 : 0,
-          rotationX: 0,
+    hide() {
+      if (this.initAnimation) {
+        TweenMax.set(this.el, {
           rotationY: 0,
-          ease: Power1.Expo
-        }
-      );
+          rotationX: 0,
+          rotationZ: 0,
+          transformPerspective: 1000,
+          autoAlpha: 0
+        });
+      }
+    },
+    show() {
+      console.log(this.initAnimation);
+      if (this.initAnimation) {
+        TweenMax.fromTo(
+          this.el,
+          0.75,
+          {
+            rotationX: -20,
+            rotationY: 20,
+            y: 150
+          },
+          {
+            y: 0,
+            autoAlpha: 1,
+            delay: this.initDelay ? Math.random() * 0.5 + 1 : 0,
+            rotationX: 0,
+            rotationY: 0,
+            ease: Power1.Expo
+          }
+        );
+      }
     }
   }
 };

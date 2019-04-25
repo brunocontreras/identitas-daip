@@ -1,28 +1,15 @@
 <template>
-  <div v-if="course" class="section">
-    <div class="md-display-1">{{ course.name }}</div>
-    <div v-if="course.children">
-      <div class="grid">
-        <app-card
-          v-for="presentation in course.children"
-          :key="presentation.name"
-          :image="presentation.slides[0]"
-          :title="presentation.name"
-          :subtitle="getSubtitle(presentation)"
-          @click="goToPresentation(presentation)"
-        />
-      </div>
-    </div>
+  <div v-if="course">
+    <app-grid :item="course" @click="goToPresentation" />
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { plurals } from "@/models/helpers";
-import AppCard from "@/components/AppCard";
+import AppGrid from "@/components/AppGrid";
 export default {
   components: {
-    AppCard
+    AppGrid
   },
   props: {
     id: {
@@ -42,31 +29,7 @@ export default {
     ...mapMutations(["SET_CURRENT"]),
     goToPresentation(presentation) {
       this.$router.push(`/presentation/${presentation.id}`);
-    },
-    getSubtitle(presentation) {
-      const strings = [
-        plurals(presentation.slides, "diapositiva", "diapositivas"),
-        plurals(presentation.videos, "video", "videos"),
-        plurals(presentation.audios, "audio", "audios")
-      ];
-      return strings.join(" / ");
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.section {
-  padding: 2rem;
-}
-.md-display-1 {
-  text-align: center;
-  margin-top: 4rem;
-}
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: stretch;
-}
-</style>
