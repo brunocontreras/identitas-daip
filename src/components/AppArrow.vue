@@ -1,5 +1,16 @@
 <template>
-  <svg width="15" height="80" viewBox="0 0 15 80">
-    <path d="M0,0 L 15,40 L 0,80" />
+  <svg width="15" :height="height" :viewBox="`0 0 15 ${height}`">
+    <path :d="`M0,0 L 15,${height / 2} L 0,${height}`" />
   </svg>
 </template>
+
+<script>
+export default {
+  props: {
+    height: {
+      type: Number,
+      required: true
+    }
+  }
+};
+</script>

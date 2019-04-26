@@ -1,13 +1,13 @@
 <template>
-  <header class="theheader">
+  <header class="theheader" :style="{ height: `${height}px` }">
     <the-logo class="logo bc-link bc-link--logo" />
-    <app-arrow class="arrow" />
+    <app-arrow class="arrow" :height="height" />
     <app-breadcrumb v-if="current" v-slot="{ links }" class="breadcrumb" :item="current">
       <template v-for="(link, i) in links">
         <router-link :key="`link${i}`" :to="link.to" class="bc-link">
           <span class="bc-link-name">{{ link.name }}</span>
         </router-link>
-        <app-arrow :key="`arrow${i}`" class="arrow" />
+        <app-arrow :key="`arrow${i}`" class="arrow" :height="height" />
       </template>
     </app-breadcrumb>
   </header>
@@ -24,6 +24,9 @@ export default {
     AppBreadcrumb,
     AppArrow
   },
+  data: () => ({
+    height: 60
+  }),
   computed: {
     ...mapState(["current"])
   }
@@ -33,9 +36,7 @@ export default {
 <style lang="scss" scoped>
 .theheader {
   --border-color: #e0e0e0;
-  --size: 80px;
   --hover-bg-color: #333;
-  height: var(--size);
   background-color: #fff;
   margin-top: 1px;
   display: flex;
@@ -46,7 +47,7 @@ export default {
   flex-shrink: 0;
   ::v-deep svg {
     position: relative;
-    top: -8px;
+    top: -6px;
   }
 }
 .breadcrumb {
