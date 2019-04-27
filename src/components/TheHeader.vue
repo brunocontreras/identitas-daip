@@ -4,10 +4,13 @@
     <app-arrow class="arrow" :height="height" />
     <app-breadcrumb v-if="current" v-slot="{ links }" class="breadcrumb" :item="current">
       <template v-for="(link, i) in links">
-        <router-link :key="`link${i}`" :to="link.to" class="bc-link">
-          <span class="bc-link-name">{{ link.name }}</span>
-        </router-link>
-        <app-arrow :key="`arrow${i}`" class="arrow" :height="height" />
+        <template v-if="i < links.length - 1">
+          <router-link :key="`link${i}`" :to="link.to" class="bc-link">
+            <span class="bc-link-name">{{ link.name }}</span>
+          </router-link>
+          <app-arrow :key="`arrow${i}`" class="arrow" :height="height" />
+        </template>
+        <span v-else :key="`name${i}`" class="bc-last">{{ link.name }}</span>
       </template>
     </app-breadcrumb>
   </header>
@@ -36,12 +39,13 @@ export default {
 <style lang="scss" scoped>
 .theheader {
   --border-color: #e0e0e0;
-  --hover-bg-color: #333;
+  --hover-bg-color: #80cae3;
   background-color: #fff;
-  margin-top: 1px;
+  border-top: 1px solid var(--border-color);
+  box-sizing: content-box;
   display: flex;
   align-items: stretch;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
 }
 .logo {
   flex-shrink: 0;
@@ -58,14 +62,17 @@ export default {
   margin-left: 0;
   padding-left: 2rem;
 }
-.bc-link {
+.bc-link,
+.bc-last {
   position: relative;
   display: flex;
   align-items: center;
   padding: 2rem;
   font-size: 1.8rem;
-  padding-left: 4rem;
+  padding-left: 3.5rem;
   margin-left: -15px;
+}
+.bc-link {
   transition-duration: 0.25s;
   transition-timing-function: ease;
   transition-property: background-color, color;
@@ -75,6 +82,7 @@ export default {
     text-decoration: none;
     + .arrow ::v-deep path {
       fill: var(--hover-bg-color);
+      stroke: var(--hover-bg-color);
     }
   }
 }
@@ -88,7 +96,8 @@ export default {
     stroke: var(--border-color);
     stroke-width: 1;
     fill: #fff;
-    transition: fill 0.25s;
+    transition-duration: 0.25s;
+    transition-property: fill, stroke;
   }
 }
 </style>

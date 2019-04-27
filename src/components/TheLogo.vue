@@ -26,11 +26,13 @@
 
 <style lang="scss" scoped>
 .applogo {
-  .letters {
-    fill: #333;
+  path {
     transition: fill 0.25s;
   }
-  &:hover .letters {
+  .letters {
+    fill: #333;
+  }
+  &:hover path {
     fill: #fff;
   }
 }
