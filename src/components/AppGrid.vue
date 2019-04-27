@@ -1,7 +1,7 @@
 <template>
   <div class="appgrid">
     <div ref="cover" class="cover" :style="{ backgroundImage: `url(${coverImage})` }" />
-    <div class="md-display-1">{{ item.name }}</div>
+    <div class="title">{{ item.name }}</div>
     <div v-if="item.children" class="grid">
       <app-card
         v-for="child in item.children"
@@ -18,7 +18,6 @@
 
 <script>
 import { TimelineMax, Power1 } from "gsap";
-import { plurals } from "@/models/helpers";
 import AppCard from "@/components/AppCard";
 export default {
   components: {
@@ -27,6 +26,10 @@ export default {
   props: {
     item: {
       type: Object,
+      required: true
+    },
+    getSubtitle: {
+      type: Function,
       required: true
     }
   },
@@ -60,16 +63,6 @@ export default {
       },
       0.05
     );
-  },
-  methods: {
-    getSubtitle(presentation) {
-      const strings = [
-        plurals(presentation.slides, "diapositiva", "diapositivas"),
-        plurals(presentation.videos, "video", "videos"),
-        plurals(presentation.audios, "audio", "audios")
-      ];
-      return strings.join(" / ");
-    }
   }
 };
 </script>
@@ -89,10 +82,12 @@ export default {
   z-index: -1;
   filter: blur(15px) brightness(0.75);
 }
-.md-display-1 {
+.title {
+  font-size: 4rem;
+  font-size: 400;
   text-align: center;
-  margin-top: 2.5rem;
-  margin-bottom: 2rem;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
   color: #fff !important;
 }
 .grid {

@@ -1,11 +1,10 @@
 <template>
-  <div v-if="course">
-    <app-grid :item="course" @click="goToPresentation" />
-  </div>
+  <app-grid v-if="course" :item="course" :get-subtitle="getSubtitle" @click="goToPresentation" />
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import { plurals } from "@/models/helpers";
 import AppGrid from "@/components/AppGrid";
 export default {
   components: {
@@ -29,6 +28,14 @@ export default {
     ...mapMutations(["SET_CURRENT"]),
     goToPresentation(presentation) {
       this.$router.push(`/presentation/${presentation.id}`);
+    },
+    getSubtitle(presentation) {
+      const strings = [
+        plurals(presentation.slides, "diapositiva", "diapositivas"),
+        plurals(presentation.videos, "video", "videos"),
+        plurals(presentation.audios, "audio", "audios")
+      ];
+      return strings.join(" / ");
     }
   }
 };
