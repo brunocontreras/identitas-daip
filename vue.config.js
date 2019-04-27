@@ -9,5 +9,14 @@ module.exports = {
         appId: "com.educarpersonas"
       }
     }
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `
+          @import "@/assets/styles/variables.scss";
+        `
+      }
+    }
   }
 };

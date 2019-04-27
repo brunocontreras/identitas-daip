@@ -52,6 +52,7 @@ export default {
   justify-content: space-between;
 }
 .avatar {
+  background-color: #e9e9e9;
   width: 40px;
   height: 40px;
   border-radius: 50%;

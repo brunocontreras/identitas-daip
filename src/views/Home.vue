@@ -10,6 +10,7 @@
       <app-card
         v-for="section in data.root"
         :key="section.name"
+        class="card"
         :image="getSectionImage(section.image)"
         :disabled="section.disabled"
         :title="section.name"
@@ -136,5 +137,9 @@ export default {
 }
 .hide {
   opacity: 0;
+}
+.card {
+  flex-basis: 20vw;
+  min-width: 18vw;
 }
 </style>

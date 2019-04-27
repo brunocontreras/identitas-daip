@@ -7,8 +7,9 @@
     <div v-if="item.children" class="grid">
       <app-card
         v-for="child in item.children"
-        ref="appcard"
         :key="child.name"
+        ref="appcard"
+        class="card"
         :title="child.name"
         :image="getImage(child)"
         :subtitle="getSubtitle(child)"
@@ -102,7 +103,7 @@ export default {
 }
 .title {
   font-size: 4rem;
-  font-size: 400;
+  font-weight: 400;
   text-align: center;
   margin-top: 1em;
   margin-bottom: 0.5em;
@@ -113,5 +114,9 @@ export default {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: stretch;
+}
+.card {
+  flex-basis: 20vw;
+  min-width: 18vw;
 }
 </style>

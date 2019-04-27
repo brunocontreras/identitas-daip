@@ -39,7 +39,6 @@ export default {
 <style lang="scss" scoped>
 .theheader {
   --border-color: #e0e0e0;
-  --hover-bg-color: #80cae3;
   background-color: #fff;
   border-top: 1px solid var(--border-color);
   box-sizing: content-box;
@@ -77,12 +76,12 @@ export default {
   transition-timing-function: ease;
   transition-property: background-color, color;
   &:hover {
-    background-color: var(--hover-bg-color);
+    background-color: $color-main;
     color: #fff !important;
     text-decoration: none;
     + .arrow ::v-deep path {
-      fill: var(--hover-bg-color);
-      stroke: var(--hover-bg-color);
+      fill: $color-main;
+      stroke: $color-main;
     }
   }
 }

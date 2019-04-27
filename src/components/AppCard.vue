@@ -14,9 +14,9 @@
     <md-card-content v-else class="md-card-content">
       <slot />
     </md-card-content>
-    <md-card-header>
-      <div class="md-title">{{ title }}</div>
-      <div class="md-subhead">{{ subtitle }}</div>
+    <md-card-header v-if="title || subtitle">
+      <div v-if="title" class="md-title">{{ title }}</div>
+      <div v-if="subtitle" class="md-subhead">{{ subtitle }}</div>
     </md-card-header>
   </md-card>
 </template>
@@ -35,11 +35,11 @@ export default {
     },
     title: {
       type: String,
-      required: true
+      default: ""
     },
     subtitle: {
       type: String,
-      required: true
+      default: ""
     },
     disabled: {
       type: Boolean,
@@ -129,8 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .appcard {
-  flex-basis: 20vw;
-  min-width: 18vw;
+  border-radius: 8px;
   margin: 2.5% 0;
   overflow: hidden;
   display: flex;
