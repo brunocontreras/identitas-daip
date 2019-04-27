@@ -130,6 +130,9 @@ export default {
   min-width: 18vw;
   margin: 2.5% 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .disabled {
   cursor: default !important;

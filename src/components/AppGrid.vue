@@ -56,7 +56,6 @@ export default {
         autoAlpha: 1,
         rotationX: 0,
         rotationY: 0,
-        delay: 0.3,
         ease: Power1.Expo
       },
       0.05
@@ -92,9 +91,9 @@ export default {
 }
 .md-display-1 {
   text-align: center;
-  margin-top: 4rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2rem;
   color: #fff !important;
-  text-shadow: 0 0 6px rgba(0, 0, 0, 1);
 }
 .grid {
   display: flex;
