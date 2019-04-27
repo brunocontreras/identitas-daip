@@ -100,7 +100,6 @@ export default {
       }
     },
     show() {
-      console.log(this.initAnimation);
       if (this.initAnimation) {
         TweenMax.fromTo(
           this.el,
