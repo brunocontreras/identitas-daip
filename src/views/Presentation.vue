@@ -15,6 +15,7 @@
           </div>
         </md-tab>
         <md-tab
+          v-if="presentation.videos.length"
           id="tab-videos"
           class="tab-content"
           :md-label="`Vídeos / ${presentation.videos.length}`"
@@ -23,6 +24,7 @@
           Vídeos
         </md-tab>
         <md-tab
+          v-if="presentation.audios.length"
           id="tab-audios"
           class="tab-content"
           :md-label="`Audios / ${presentation.audios.length}`"
@@ -53,7 +55,6 @@
       <video :src="video"></video>
     </vue-plyr>
   </app-template>
-  <!-- <div class="presentation" @keyup.right="next" @keyup.left="prev"></div> -->
 </template>
 
 <script>
