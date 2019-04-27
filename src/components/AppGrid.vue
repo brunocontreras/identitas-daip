@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { TimelineMax, Power1 } from "gsap";
+// import { TimelineMax, Power1 } from "gsap";
 import AppCard from "@/components/AppCard";
 export default {
   components: {
@@ -47,28 +47,28 @@ export default {
     }
   },
   mounted() {
-    const items = this.$refs.appcard.map(x => x.$el);
-    const timeline = new TimelineMax();
-    timeline.staggerFromTo(
-      items,
-      0.75,
-      {
-        autoAlpha: 0,
-        rotationX: -20,
-        rotationY: 20,
-        rotationZ: 0,
-        transformPerspective: 1000,
-        y: 150
-      },
-      {
-        y: 0,
-        autoAlpha: 1,
-        rotationX: 0,
-        rotationY: 0,
-        ease: Power1.Expo
-      },
-      0.05
-    );
+    // const items = this.$refs.appcard.map(x => x.$el);
+    // const timeline = new TimelineMax();
+    // timeline.staggerFromTo(
+    //   items,
+    //   0.75,
+    //   {
+    //     autoAlpha: 0,
+    //     rotationX: -20,
+    //     rotationY: 20,
+    //     rotationZ: 0,
+    //     transformPerspective: 1000,
+    //     y: 150
+    //   },
+    //   {
+    //     y: 0,
+    //     autoAlpha: 1,
+    //     rotationX: 0,
+    //     rotationY: 0,
+    //     ease: Power1.Expo
+    //   },
+    //   0.05
+    // );
   }
 };
 </script>

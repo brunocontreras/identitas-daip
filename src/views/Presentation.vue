@@ -4,9 +4,9 @@
       ref="slideshow"
       :images="images"
       :displacement="require('@/assets/displacement.png')"
-      :intensity="0.2"
-      :speed-in="1.4"
-      :speed-out="1.4"
+      :intensity="0.1"
+      :speed-in="0.7"
+      :speed-out="0.7"
       ease="Expo.easeInOut"
     />
     <md-button class="button md-raised md-primary" @click="playVideo">Show video</md-button>
@@ -49,10 +49,6 @@ export default {
   mounted() {
     this.keyupHandler = this.keyup.bind(this);
     document.addEventListener("keyup", this.keyupHandler);
-    // setInterval(() => {
-    //   this.$refs.slideshow.next()
-    //   console.log('next')
-    // }, 2500)
   },
   beforeDestroy() {
     document.removeEventListener("keyup", this.keyupHandler);

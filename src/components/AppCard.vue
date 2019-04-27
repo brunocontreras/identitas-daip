@@ -60,6 +60,7 @@ export default {
     }
   },
   mounted() {
+    this.init();
     this.$slots.default ? this.show() : this.hide();
   },
   methods: {
@@ -88,15 +89,17 @@ export default {
         ease: Power1.easeOut
       });
     },
+    init() {
+      TweenMax.set(this.el, {
+        rotationY: 0,
+        rotationX: 0,
+        rotationZ: 0,
+        transformPerspective: 1000
+      });
+    },
     hide() {
       if (this.initAnimation) {
-        TweenMax.set(this.el, {
-          rotationY: 0,
-          rotationX: 0,
-          rotationZ: 0,
-          transformPerspective: 1000,
-          autoAlpha: 0
-        });
+        TweenMax.set(this.el, { autoAlpha: 0 });
       }
     },
     show() {
