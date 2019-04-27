@@ -1,9 +1,11 @@
 <template>
   <app-grid v-if="section" :item="section" :get-subtitle="getSubtitle" @click="goToCourse">
     <template v-slot="{ item }">
-      <md-avatar v-for="presentation in item.children" :key="`presentation${presentation.id}`">
-        <app-image :src="presentation.slides[0]" />
-      </md-avatar>
+      <div class="avatars">
+        <md-avatar v-for="presentation in item.children" :key="`presentation${presentation.id}`" class="avatar">
+          <app-image :src="presentation.slides[0]" />
+        </md-avatar>
+      </div>
     </template>
   </app-grid>
 </template>
@@ -44,7 +46,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.md-avatar {
+.avatars {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
   margin: 2px;
   img {
     transform: scale(1.5);

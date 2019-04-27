@@ -11,7 +11,7 @@
     <md-card-media v-if="image">
       <app-image :src="image" @loaded="show" />
     </md-card-media>
-    <md-card-content v-else>
+    <md-card-content v-else class="md-card-content">
       <slot />
     </md-card-content>
     <md-card-header>
@@ -137,6 +137,9 @@ export default {
 .disabled {
   cursor: default !important;
   filter: grayscale(100%);
+}
+.md-card-content {
+  padding-bottom: 0;
 }
 .md-subhead {
   margin-top: 0.5em !important;

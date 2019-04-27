@@ -11,7 +11,7 @@ export default {
     }
   },
   data: () => ({
-    loaded: true
+    loaded: false
   }),
   methods: {
     onLoad() {
