@@ -1,5 +1,12 @@
 <template>
-  <app-grid v-if="course" :item="course" :get-image="getImage" :get-subtitle="getSubtitle" @click="goToPresentation" />
+  <app-grid
+    v-if="course"
+    :item="course"
+    :get-image="getImage"
+    :get-subtitle="getSubtitle"
+    :animation="true"
+    @click="goToPresentation"
+  />
 </template>
 
 <script>
