@@ -45,7 +45,7 @@ html {
   font-size: 10px;
 }
 body {
-  font-family: Roboto;
+  font-family: Omnes !important;
   margin: 0;
   height: 100%;
   width: 100%;
@@ -66,6 +66,30 @@ a {
   border-radius: 8px;
   border: 3px solid transparent;
   box-shadow: inset 0 0 0 4px #fff;
+}
+@font-face {
+  font-family: "Omnes";
+  src: url("~@/assets/fonts/Omnes-Hairline.otf");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Omnes";
+  src: url("~@/assets/fonts/Omnes-Light.otf");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Omnes";
+  src: url("~@/assets/fonts/Omnes-Regular.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Omnes";
+  src: url("~@/assets/fonts/Omnes-Medium.otf");
+  font-weight: 500;
+  font-style: normal;
 }
 @font-face {
   font-family: "Roboto";

@@ -1,6 +1,8 @@
 <template>
   <div class="appgrid">
-    <div ref="cover" class="cover" :style="{ backgroundImage: `url(${coverImage})` }" />
+    <div class="cover-wrapper">
+      <div ref="cover" class="cover" :style="{ backgroundImage: `url(${coverImage})` }" />
+    </div>
     <div class="title">{{ item.name }}</div>
     <div v-if="item.children" class="grid">
       <app-card
@@ -77,16 +79,20 @@ export default {
 .appgrid {
   padding: 2rem;
 }
-.cover {
+.cover-wrapper {
   position: fixed;
-  top: -15px;
-  bottom: -15px;
-  left: -15px;
-  right: -15px;
-  background-size: cover;
-  background-position-y: 20%;
+  top: -30px;
+  bottom: -30px;
+  left: -30px;
+  right: -30px;
   z-index: -1;
   filter: blur(15px) brightness(0.75);
+}
+.cover {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position-y: 20%;
 }
 .title {
   font-size: 4rem;
