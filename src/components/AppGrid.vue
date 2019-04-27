@@ -7,11 +7,13 @@
         v-for="child in item.children"
         ref="appcard"
         :key="child.name"
-        :image="child.slides[0]"
         :title="child.name"
+        :image="getImage(child)"
         :subtitle="getSubtitle(child)"
         @click="$emit('click', child)"
-      />
+      >
+        <slot :item="child" />
+      </app-card>
     </div>
   </div>
 </template>
@@ -27,6 +29,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    getImage: {
+      type: Function,
+      default: () => ""
     },
     getSubtitle: {
       type: Function,

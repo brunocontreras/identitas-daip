@@ -1,5 +1,5 @@
 <template>
-  <app-grid v-if="course" :item="course" :get-subtitle="getSubtitle" @click="goToPresentation" />
+  <app-grid v-if="course" :item="course" :get-image="getImage" :get-subtitle="getSubtitle" @click="goToPresentation" />
 </template>
 
 <script>
@@ -28,6 +28,9 @@ export default {
     ...mapMutations(["SET_CURRENT"]),
     goToPresentation(presentation) {
       this.$router.push(`/presentation/${presentation.id}`);
+    },
+    getImage(presentation) {
+      return presentation.slides[0];
     },
     getSubtitle(presentation) {
       const strings = [

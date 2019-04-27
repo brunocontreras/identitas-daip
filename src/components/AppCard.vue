@@ -139,6 +139,7 @@ export default {
   filter: grayscale(100%);
 }
 .md-subhead {
-  margin-top: 1rem;
+  margin-top: 0.5em !important;
+  margin-bottom: -0.5em !important;
 }
 </style>
