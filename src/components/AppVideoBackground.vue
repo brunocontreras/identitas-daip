@@ -13,7 +13,7 @@
   object-fit: cover;
 }
 .video-mask {
-  background-image: radial-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 1));
+  background-image: $bg-radial;
   position: fixed;
   height: 100%;
   width: 100%;

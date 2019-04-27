@@ -129,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .appcard {
-  border-radius: 8px;
+  border-radius: $border-radius;
   margin: 2.5% 0;
   overflow: hidden;
   display: flex;

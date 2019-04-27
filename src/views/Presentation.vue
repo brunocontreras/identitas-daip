@@ -31,7 +31,13 @@
           Audios
         </md-tab>
       </md-tabs>
-      <img class="main-slide" :src="presentation.slides[currentSlide]" />
+      <div ref="mainslide" class="main-slide">
+        <app-progress :progress="presentationProgress" />
+        <img :src="presentation.slides[currentSlide]" />
+        <div class="icon-fullscreen-wrapper">
+          <md-icon class="icon-fullscreen md-size-4x">fullscreen</md-icon>
+        </div>
+      </div>
       <vue-displacement-slideshow
         v-if="false"
         ref="slideshow"
@@ -56,10 +62,12 @@ import { mapState, mapMutations } from "vuex";
 import VueDisplacementSlideshow from "vue-displacement-slideshow";
 import AppTemplate from "@/components/AppTemplate";
 import AppCard from "@/components/AppCard";
+import AppProgress from "@/components/AppProgress";
 export default {
   components: {
     AppTemplate,
     AppCard,
+    AppProgress,
     VueDisplacementSlideshow
   },
   props: {
@@ -74,6 +82,9 @@ export default {
   }),
   computed: {
     ...mapState(["data"]),
+    presentationProgress() {
+      return this.currentSlide / (this.presentation.slides.length - 1);
+    },
     presentation() {
       const presentation = this.data.presentations.find(x => x.id === parseInt(this.id));
       this.SET_CURRENT(presentation);
@@ -84,26 +95,34 @@ export default {
     }
   },
   mounted() {
-    this.keyupHandler = this.keyup.bind(this);
-    document.addEventListener("keyup", this.keyupHandler);
+    document.addEventListener("keyup", this.onKeyup);
+    this.$refs.mainslide.addEventListener("mousewheel", this.onMouseWheel);
   },
   beforeDestroy() {
-    document.removeEventListener("keyup", this.keyupHandler);
+    document.removeEventListener("keyup", this.onKeyup);
+    this.$refs.mainslide.removeEventListener("mousewheel", this.onMouseWheel);
   },
   methods: {
     ...mapMutations(["SET_CURRENT"]),
-    keyup(e) {
-      if (e.keyCode === 37) this.prev();
-      if (e.keyCode === 39) this.next();
+    onKeyup(e) {
+      const prevKeyCodes = [33, 37, 38];
+      const nextKeyCodes = [34, 39, 40];
+      if (prevKeyCodes.includes(e.keyCode)) this.prev();
+      if (nextKeyCodes.includes(e.keyCode)) this.next();
+    },
+    onMouseWheel(e) {
+      e.deltaY > 0 ? this.next() : this.prev();
     },
     playVideo() {
       this.showVideo = true;
     },
     next() {
-      this.$refs.slideshow.next();
+      if (this.currentSlide < this.presentation.slides.length - 1) this.currentSlide++;
+      // this.$refs.slideshow.next();
     },
     prev() {
-      this.$refs.slideshow.previous();
+      if (this.currentSlide > 0) this.currentSlide--;
+      // this.$refs.slideshow.previous();
     }
   }
 };
@@ -128,7 +147,7 @@ export default {
   align-items: stretch;
 }
 .tabs {
-  border-radius: 8px;
+  border-radius: $border-radius;
   overflow: hidden;
   flex-shrink: 0;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
@@ -166,9 +185,39 @@ export default {
   width: 75%;
 }
 .main-slide {
-  border-radius: 8px;
+  border-radius: $border-radius;
   align-self: center;
   width: 55%;
   margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  &:hover .icon-fullscreen-wrapper {
+    opacity: 1;
+    .icon-fullscreen {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+.icon-fullscreen-wrapper {
+  cursor: pointer;
+  border-radius: $border-radius;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: opacity 0.25s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-fullscreen {
+  color: #fff !important;
+  transform: translateY(25%);
+  opacity: 0;
+  transition: all 0.4s 0.1s;
 }
 </style>
