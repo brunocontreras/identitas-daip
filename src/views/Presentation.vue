@@ -70,8 +70,16 @@
       :emit="['exitfullscreen']"
       @exitfullscreen="videoExitFullScreen"
     >
-      <video :src="currentVideo.path" autoplay></video>
+      <video :src="currentVideo.path" autoplay />
     </vue-plyr>
+    <div v-if="currentAudio" ref="audio" class="lyrics-wrapper" @click="toggleAudio">
+      <app-cover :item="presentation" />
+      <h1>{{ currentAudio.name }}</h1>
+      <pre class="lyrics">{{ currentAudio.lyrics }}</pre>
+      <vue-plyr ref="audioplayer">
+        <audio :src="currentAudio.path" autoplay />
+      </vue-plyr>
+    </div>
   </section>
 </template>
 
@@ -118,9 +126,6 @@ export default {
     },
     slides() {
       return this.presentation.slides;
-    },
-    audios() {
-      return this.presentation.audios;
     },
     tabSlidesName() {
       return `Diapositivas / ${this.slides.length}`;
@@ -180,7 +185,7 @@ export default {
     currentAudio() {
       if (this.currentAudio) {
         this.$nextTick(() => {
-          // this.$refs.videoplayer.player.fullscreen.enter();
+          this.$refs.audio.webkitRequestFullScreen();
         });
       }
     }
@@ -202,6 +207,7 @@ export default {
       if (nextKeyCodes.includes(e.keyCode)) this.next();
       if (e.keyCode === 27) {
         if (!this.currentVideo) document.webkitExitFullscreen();
+        if (this.currentAudio) this.currentAudio = null;
       }
     },
     onMouseWheel(e) {
@@ -235,6 +241,9 @@ export default {
     },
     videoExitFullScreen() {
       this.currentVideo = null;
+    },
+    toggleAudio() {
+      this.$refs.audioplayer.player.togglePlay();
     }
   }
 };
@@ -355,5 +364,28 @@ export default {
 }
 .empty-state ::v-deep .md-empty-state-label {
   color: rgba(0, 0, 0, 0.26);
+}
+.lyrics-wrapper {
+  display: none;
+  &:fullscreen {
+    padding-top: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+.lyrics {
+  border-radius: $border-radius;
+  flex-grow: 1;
+  font-family: inherit;
+  width: 75%;
+  margin: 4rem auto;
+  font-size: 5rem;
+  line-height: 1.5;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  overflow: auto;
+  text-align: center;
+  padding: 15rem 5rem;
+  white-space: pre-wrap;
 }
 </style>

@@ -2,6 +2,7 @@ import { join } from "path";
 import { getDirectories, getFiles, isFile, isEqual, extractName } from "./helpers";
 import config from "./config";
 import { TYPES } from "./types";
+import { readFileSync } from "fs";
 // import ffprobe from 'ffprobe'
 // import ffprobeStatic from 'ffprobe-static'
 
@@ -84,6 +85,7 @@ const newAudio = ({ path, lyricsDirPath, name, parent }) => {
   const lyricsPath = join(lyricsDirPath, lyricsFile);
   if (isFile(lyricsPath)) {
     audio.lyricsPath = lyricsPath;
+    audio.lyrics = readFileSync(lyricsPath);
   }
   data.audios.push(audio);
   return audio;
