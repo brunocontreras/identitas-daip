@@ -21,7 +21,7 @@ export default {
   left: 0;
   width: 100%;
   height: 4px;
-  transition: transform 0.75s $ease-quart-out;
+  transition: transform 0.5s $ease-quart-out;
   transform-origin: 0 50%;
 }
 </style>

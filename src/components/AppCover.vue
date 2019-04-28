@@ -1,10 +1,6 @@
 <template>
-  <div class="apptemplate">
-    <div class="cover-wrapper">
-      <div ref="cover" class="cover" :style="{ backgroundImage: `url(${coverImage})` }" />
-    </div>
-    <div class="title">{{ item.name }}</div>
-    <slot />
+  <div class="appcover">
+    <div ref="cover" class="cover" :style="{ backgroundImage: `url(${coverImage})` }" />
   </div>
 </template>
 
@@ -27,10 +23,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.apptemplate {
-  padding: 2rem;
-}
-.cover-wrapper {
+.appcover {
   position: fixed;
   top: -30px;
   bottom: -30px;
@@ -44,19 +37,5 @@ export default {
   height: 100%;
   background-size: cover;
   background-position-y: 20%;
-}
-.title {
-  font-size: 4rem;
-  font-weight: 400;
-  text-align: center;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  color: #fff !important;
-}
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: stretch;
 }
 </style>

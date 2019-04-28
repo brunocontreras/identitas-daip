@@ -1,9 +1,7 @@
 <template>
   <div class="appgrid">
-    <div class="cover-wrapper">
-      <div ref="cover" class="cover" :style="{ backgroundImage: `url(${coverImage})` }" />
-    </div>
-    <div class="title">{{ item.name }}</div>
+    <app-cover :item="item" />
+    <h1>{{ item.name }}</h1>
     <div v-if="item.children" class="grid">
       <app-card
         v-for="child in item.children"
@@ -23,9 +21,11 @@
 
 <script>
 import { TimelineMax, Power1 } from "gsap";
+import AppCover from "@/components/AppCover";
 import AppCard from "@/components/AppCard";
 export default {
   components: {
+    AppCover,
     AppCard
   },
   props: {
@@ -44,13 +44,6 @@ export default {
     animation: {
       type: Boolean,
       default: false
-    }
-  },
-  computed: {
-    coverImage() {
-      let item = this.item;
-      while (item.parent) item = item.parent;
-      return require(`@/assets/${item.image}`);
     }
   },
   mounted() {
@@ -84,30 +77,7 @@ export default {
 
 <style lang="scss" scoped>
 .appgrid {
-  padding: 2rem;
-}
-.cover-wrapper {
-  position: fixed;
-  top: -30px;
-  bottom: -30px;
-  left: -30px;
-  right: -30px;
-  z-index: -1;
-  filter: blur(15px) brightness(0.75);
-}
-.cover {
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position-y: 20%;
-}
-.title {
-  font-size: 4rem;
-  font-weight: 400;
-  text-align: center;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  color: #fff !important;
+  padding: 4rem;
 }
 .grid {
   display: flex;

@@ -1,71 +1,58 @@
 <template>
-  <app-template v-if="presentation" :item="presentation" class="presentation">
-    <div class="container">
-      <md-tabs class="tabs" md-alignment="fixed">
-        <md-tab
-          id="tab-slides"
-          class="tab-content"
-          :md-label="`Diapositivas / ${presentation.slides.length}`"
-          md-icon="burst_mode"
-        >
-          <div class="preview-slides">
-            <template v-for="(slide, i) in presentation.slides">
-              <app-card :key="slide" class="preview-slide" :image="slide" @click="currentSlide = i" />
-            </template>
-          </div>
-        </md-tab>
-        <md-tab
-          v-if="presentation.videos.length"
-          id="tab-videos"
-          class="tab-content"
-          :md-label="`Vídeos / ${presentation.videos.length}`"
-          md-icon="movie"
-        >
-          Vídeos
-        </md-tab>
-        <md-tab
-          v-if="presentation.audios.length"
-          id="tab-audios"
-          class="tab-content"
-          :md-label="`Audios / ${presentation.audios.length}`"
-          md-icon="queue_music"
-        >
-          Audios
-        </md-tab>
-      </md-tabs>
-      <div ref="mainslide" class="main-slide" @dblclick="toggleFullScreen">
-        <app-progress :progress="presentationProgress" />
-        <img :src="presentation.slides[currentSlide]" />
-        <div class="icon-fullscreen-wrapper">
-          <md-icon class="icon-fullscreen md-size-3x">fullscreen</md-icon>
+  <section v-if="presentation" class="presentation">
+    <app-cover :item="presentation" />
+    <md-tabs class="tabs" md-alignment="fixed">
+      <md-tab id="tab-slides" class="tab-content" :md-label="tabSlidesName" md-icon="burst_mode">
+        <div class="preview-slides">
+          <template v-for="(slide, i) in slides">
+            <app-card :key="slide" class="preview-slide" :image="slide" @click="currentSlide = i" />
+          </template>
         </div>
-        <!-- <vue-displacement-slideshow
-          ref="slideshow"
-          :images="presentation.slides"
-          :displacement="require('@/assets/displacement.png')"
-          :intensity="0.1"
-          :speed-in="0.7"
-          :speed-out="0.7"
-          ease="Expo.easeInOut"
-        /> -->
+      </md-tab>
+      <md-tab v-if="videos.length" id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
+        Vídeos
+      </md-tab>
+      <md-tab v-if="audios.length" id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
+        Audios
+      </md-tab>
+    </md-tabs>
+    <div class="slider-container">
+      <h1>{{ presentation.name }}</h1>
+      <div class="slider-wrapper">
+        <div ref="slider" class="slider" @dblclick="toggleFullScreen">
+          <app-progress :progress="presentationProgress" />
+          <img :src="slides[currentSlide]" />
+          <div class="icon-fullscreen-wrapper">
+            <md-icon class="icon-fullscreen md-size-3x">fullscreen</md-icon>
+          </div>
+          <!-- <vue-displacement-slideshow
+            ref="slideshow"
+            :images="presentation.slides"
+            :displacement="require('@/assets/displacement.png')"
+            :intensity="0.1"
+            :speed-in="0.7"
+            :speed-out="0.7"
+            ease="Expo.easeInOut"
+          /> -->
+        </div>
       </div>
     </div>
     <md-button v-if="false" class="button md-raised md-primary" @click="playVideo">Show video</md-button>
     <vue-plyr v-if="showVideo" class="video">
       <video :src="video"></video>
     </vue-plyr>
-  </app-template>
+  </section>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
 // import VueDisplacementSlideshow from "vue-displacement-slideshow";
-import AppTemplate from "@/components/AppTemplate";
+import AppCover from "@/components/AppCover";
 import AppCard from "@/components/AppCard";
 import AppProgress from "@/components/AppProgress";
 export default {
   components: {
-    AppTemplate,
+    AppCover,
     AppCard,
     AppProgress
     // VueDisplacementSlideshow
@@ -84,7 +71,7 @@ export default {
   computed: {
     ...mapState(["data"]),
     presentationProgress() {
-      return this.currentSlide / (this.presentation.slides.length - 1);
+      return this.currentSlide / (this.slides.length - 1);
     },
     presentation() {
       const presentation = this.data.presentations.find(x => x.id === parseInt(this.id));
@@ -93,15 +80,33 @@ export default {
     },
     video() {
       return this.presentation.videos[0].path;
+    },
+    slides() {
+      return this.presentation.slides;
+    },
+    videos() {
+      return this.presentation.videos;
+    },
+    audios() {
+      return this.presentation.audios;
+    },
+    tabSlidesName() {
+      return `Diapositivas / ${this.slides.length}`;
+    },
+    tabVideosName() {
+      return `Vídeos / ${this.videos.length}`;
+    },
+    tabAudiosName() {
+      return `Audios / ${this.audios.length}`;
     }
   },
   mounted() {
     document.addEventListener("keydown", this.onKeydown);
-    this.$refs.mainslide.addEventListener("mousewheel", this.onMouseWheel);
+    this.$refs.slider.addEventListener("mousewheel", this.onMouseWheel);
   },
   beforeDestroy() {
     document.removeEventListener("keydown", this.onKeydown);
-    this.$refs.mainslide.removeEventListener("mousewheel", this.onMouseWheel);
+    this.$refs.slider.removeEventListener("mousewheel", this.onMouseWheel);
   },
   methods: {
     ...mapMutations(["SET_CURRENT"]),
@@ -119,7 +124,7 @@ export default {
       this.showVideo = true;
     },
     next() {
-      if (this.currentSlide < this.presentation.slides.length - 1) this.currentSlide++;
+      if (this.currentSlide < this.slides.length - 1) this.currentSlide++;
       // this.$refs.slideshow.next();
     },
     prev() {
@@ -128,7 +133,7 @@ export default {
     },
     toggleFullScreen() {
       this.fullScreen = !this.fullScreen;
-      this.fullScreen ? this.$refs.mainslide.webkitRequestFullScreen() : document.webkitExitFullscreen();
+      this.fullScreen ? this.$refs.slider.webkitRequestFullScreen() : document.webkitExitFullscreen();
     }
   }
 };
@@ -136,8 +141,8 @@ export default {
 
 <style lang="scss" scoped>
 .presentation {
+  padding: 4rem;
   display: flex;
-  flex-direction: column;
 }
 .video {
   position: fixed;
@@ -190,11 +195,23 @@ export default {
 .preview-slide {
   width: 75%;
 }
-.main-slide {
+.slider-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 4rem;
+}
+.slider-wrapper {
+  margin-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.slider {
   border-radius: $border-radius;
   align-self: center;
-  width: 55%;
-  margin: 0 auto;
+  width: 90%;
   overflow: hidden;
   position: relative;
   user-select: none;

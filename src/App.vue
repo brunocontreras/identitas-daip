@@ -58,6 +58,15 @@ input {
 a {
   color: #666 !important;
 }
+h1 {
+  font-size: 4rem;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.25;
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #fff;
+}
 ::-webkit-scrollbar {
   width: 12px;
   background-color: rgba(255, 255, 255, 0.1);
