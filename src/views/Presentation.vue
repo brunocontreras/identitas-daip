@@ -10,7 +10,7 @@
         </div>
       </md-tab>
       <md-tab id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
-        <md-switch v-model="showAllVideos" class="md-primary">Todos los vídeos</md-switch>
+        <md-switch v-model="showAllVideos" class="md-primary">Todos los vídeos / {{ data.videos.length }}</md-switch>
         <md-progress-spinner
           v-if="fetchingAllVideos"
           class="md-primary spinner"
@@ -27,10 +27,27 @@
             @click="currentVideo = video"
           />
         </template>
-        <md-empty-state v-else md-icon="movie" md-label="No hay ningún vídeo disponible" />
+        <md-empty-state v-else class="empty-state" md-icon="movie" md-label="No hay ningún vídeo" />
       </md-tab>
       <md-tab id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
-        Audios
+        <md-switch v-model="showAllAudios" class="md-primary">Todos los audios / {{ data.audios.length }}</md-switch>
+        <md-progress-spinner
+          v-if="fetchingAllAudios"
+          class="md-primary spinner"
+          :md-diameter="30"
+          :md-stroke="3"
+          md-mode="indeterminate"
+        />
+        <template v-else-if="audios.length">
+          <app-card
+            v-for="audio in audios"
+            :key="audio.path"
+            :title="audio.name"
+            :subtitle="getBreadcrumb(audio)"
+            @click="currentAudio = audio"
+          />
+        </template>
+        <md-empty-state v-else class="empty-state" md-icon="queue_music" md-label="No hay ningún audio" />
       </md-tab>
     </md-tabs>
     <div class="slider-container">
@@ -40,7 +57,7 @@
           <app-progress :progress="presentationProgress" />
           <img :src="slides[currentSlide]" />
           <div class="icon-fullscreen-wrapper">
-            <md-icon class="icon-fullscreen md-size-3x">fullscreen</md-icon>
+            <md-icon class="icon-fullscreen md-size-2x">fullscreen</md-icon>
           </div>
         </div>
       </div>
@@ -78,10 +95,16 @@ export default {
   data: () => ({
     currentSlide: 0,
     fullScreen: false,
+
     videos: [],
     currentVideo: null,
     showAllVideos: false,
-    fetchingAllVideos: false
+    fetchingAllVideos: false,
+
+    audios: [],
+    currentAudio: null,
+    showAllAudios: false,
+    fetchingAllAudios: false
   }),
   computed: {
     ...mapState(["data"]),
@@ -110,7 +133,7 @@ export default {
     },
     videoPlayerOptions() {
       return {
-        controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "pip"]
+        controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings"]
       };
     }
   },
@@ -135,6 +158,29 @@ export default {
       if (this.currentVideo) {
         this.$nextTick(() => {
           this.$refs.videoplayer.player.fullscreen.enter();
+        });
+      }
+    },
+    showAllAudios: {
+      immediate: true,
+      handler() {
+        if (this.showAllAudios) {
+          this.fetchingAllAudios = true;
+          new Promise(resolve => {
+            setTimeout(() => resolve(this.sort(this.data.audios)), 100);
+          }).then(audios => {
+            this.audios = audios;
+            this.fetchingAllAudios = false;
+          });
+        } else {
+          this.audios = this.presentation.audios;
+        }
+      }
+    },
+    currentAudio() {
+      if (this.currentAudio) {
+        this.$nextTick(() => {
+          // this.$refs.videoplayer.player.fullscreen.enter();
         });
       }
     }
@@ -283,14 +329,14 @@ export default {
   }
 }
 .icon-fullscreen-wrapper {
-  border-radius: $border-radius;
+  border-radius: 50%;
   background: rgba(0, 0, 0, 0.4);
   opacity: 0;
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100px;
+  height: 100px;
+  right: 1rem;
+  bottom: 1rem;
   transition: opacity 0.25s;
   display: flex;
   align-items: center;
@@ -305,5 +351,8 @@ export default {
 .videoplayer {
   position: absolute !important;
   top: 200%;
+}
+.empty-state ::v-deep .md-empty-state-label {
+  color: rgba(0, 0, 0, 0.26);
 }
 </style>
