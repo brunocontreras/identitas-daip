@@ -9,16 +9,16 @@
           </template>
         </div>
       </md-tab>
-      <md-tab v-if="videos.length" id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
+      <md-tab id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
         <md-switch v-model="showAllVideos" class="md-primary">Todos los vídeos</md-switch>
         <md-progress-spinner
-          v-show="fetchingAllVideos"
+          v-if="fetchingAllVideos"
           class="md-primary spinner"
           :md-diameter="30"
           :md-stroke="3"
           md-mode="indeterminate"
         />
-        <template v-if="!fetchingAllVideos">
+        <template v-else-if="videos.length">
           <app-card
             v-for="video in videos"
             :key="video.path"
@@ -27,8 +27,9 @@
             @click="currentVideo = video"
           />
         </template>
+        <md-empty-state v-else md-icon="movie" md-label="No hay ningún vídeo disponible" />
       </md-tab>
-      <md-tab v-if="audios.length" id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
+      <md-tab id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
         Audios
       </md-tab>
     </md-tabs>
