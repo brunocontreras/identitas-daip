@@ -10,7 +10,23 @@
         </div>
       </md-tab>
       <md-tab v-if="videos.length" id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
-        Vídeos
+        <md-switch v-model="showAllVideos" class="md-primary">Todos los vídeos</md-switch>
+        <md-progress-spinner
+          v-show="fetchingAllVideos"
+          class="md-primary spinner"
+          :md-diameter="30"
+          :md-stroke="3"
+          md-mode="indeterminate"
+        />
+        <template v-if="!fetchingAllVideos">
+          <app-card
+            v-for="video in videos"
+            :key="video.path"
+            :title="video.name"
+            :subtitle="getBreadcrumb(video)"
+            @click="currentVideo = video"
+          />
+        </template>
       </md-tab>
       <md-tab v-if="audios.length" id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
         Audios
@@ -25,28 +41,24 @@
           <div class="icon-fullscreen-wrapper">
             <md-icon class="icon-fullscreen md-size-3x">fullscreen</md-icon>
           </div>
-          <!-- <vue-displacement-slideshow
-            ref="slideshow"
-            :images="presentation.slides"
-            :displacement="require('@/assets/displacement.png')"
-            :intensity="0.1"
-            :speed-in="0.7"
-            :speed-out="0.7"
-            ease="Expo.easeInOut"
-          /> -->
         </div>
       </div>
     </div>
-    <md-button v-if="false" class="button md-raised md-primary" @click="playVideo">Show video</md-button>
-    <vue-plyr v-if="showVideo" class="video">
-      <video :src="video"></video>
+    <vue-plyr
+      v-if="currentVideo"
+      ref="videoplayer"
+      class="videoplayer"
+      :options="videoPlayerOptions"
+      :emit="['exitfullscreen']"
+      @exitfullscreen="videoExitFullScreen"
+    >
+      <video :src="currentVideo.path" autoplay></video>
     </vue-plyr>
   </section>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
-// import VueDisplacementSlideshow from "vue-displacement-slideshow";
 import AppCover from "@/components/AppCover";
 import AppCard from "@/components/AppCard";
 import AppProgress from "@/components/AppProgress";
@@ -55,7 +67,6 @@ export default {
     AppCover,
     AppCard,
     AppProgress
-    // VueDisplacementSlideshow
   },
   props: {
     id: {
@@ -66,7 +77,10 @@ export default {
   data: () => ({
     currentSlide: 0,
     fullScreen: false,
-    showVideo: false
+    videos: [],
+    currentVideo: null,
+    showAllVideos: false,
+    fetchingAllVideos: false
   }),
   computed: {
     ...mapState(["data"]),
@@ -78,14 +92,8 @@ export default {
       this.SET_CURRENT(presentation);
       return presentation;
     },
-    video() {
-      return this.presentation.videos[0].path;
-    },
     slides() {
       return this.presentation.slides;
-    },
-    videos() {
-      return this.presentation.videos;
     },
     audios() {
       return this.presentation.audios;
@@ -98,6 +106,36 @@ export default {
     },
     tabAudiosName() {
       return `Audios / ${this.audios.length}`;
+    },
+    videoPlayerOptions() {
+      return {
+        controls: ["play-large", "play", "progress", "current-time", "mute", "volume", "captions", "settings", "pip"]
+      };
+    }
+  },
+  watch: {
+    showAllVideos: {
+      immediate: true,
+      handler() {
+        if (this.showAllVideos) {
+          this.fetchingAllVideos = true;
+          new Promise(resolve => {
+            setTimeout(() => resolve(this.sort(this.data.videos)), 100);
+          }).then(videos => {
+            this.videos = videos;
+            this.fetchingAllVideos = false;
+          });
+        } else {
+          this.videos = this.presentation.videos;
+        }
+      }
+    },
+    currentVideo() {
+      if (this.currentVideo) {
+        this.$nextTick(() => {
+          this.$refs.videoplayer.player.fullscreen.enter();
+        });
+      }
     }
   },
   mounted() {
@@ -115,25 +153,41 @@ export default {
       const nextKeyCodes = [34, 39, 40];
       if (prevKeyCodes.includes(e.keyCode)) this.prev();
       if (nextKeyCodes.includes(e.keyCode)) this.next();
-      if (e.keyCode === 27) document.webkitExitFullscreen();
+      if (e.keyCode === 27) {
+        if (!this.currentVideo) document.webkitExitFullscreen();
+      }
     },
     onMouseWheel(e) {
       e.deltaY > 0 ? this.next() : this.prev();
     },
-    playVideo() {
-      this.showVideo = true;
-    },
     next() {
       if (this.currentSlide < this.slides.length - 1) this.currentSlide++;
-      // this.$refs.slideshow.next();
     },
     prev() {
       if (this.currentSlide > 0) this.currentSlide--;
-      // this.$refs.slideshow.previous();
     },
     toggleFullScreen() {
       this.fullScreen = !this.fullScreen;
       this.fullScreen ? this.$refs.slider.webkitRequestFullScreen() : document.webkitExitFullscreen();
+    },
+    sort(collection) {
+      return collection.sort((a, b) => {
+        if (a.name > b.name) return 1;
+        else if (a.name < b.name) return -1;
+        return 0;
+      });
+    },
+    getBreadcrumb(item) {
+      const breadcrumb = [];
+      let parent = item.parent;
+      while (parent) {
+        breadcrumb.unshift(parent.name);
+        parent = parent.parent;
+      }
+      return breadcrumb.join(" / ");
+    },
+    videoExitFullScreen() {
+      this.currentVideo = null;
     }
   }
 };
@@ -143,13 +197,6 @@ export default {
 .presentation {
   padding: 4rem;
   display: flex;
-}
-.video {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 .container {
   display: flex;
@@ -253,5 +300,9 @@ export default {
   transform: translateY(25%);
   opacity: 0;
   transition: all 0.4s 0.1s;
+}
+.videoplayer {
+  position: absolute !important;
+  top: 200%;
 }
 </style>

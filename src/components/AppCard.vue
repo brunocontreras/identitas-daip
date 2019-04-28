@@ -11,7 +11,7 @@
     <md-card-media v-if="image">
       <app-image :src="image" @loaded="show" />
     </md-card-media>
-    <md-card-content v-else class="md-card-content">
+    <md-card-content v-else-if="$slots.default" class="md-card-content">
       <slot />
     </md-card-content>
     <md-card-header v-if="title || subtitle">
