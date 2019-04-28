@@ -96,16 +96,16 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener("keyup", this.onKeyup);
+    document.addEventListener("keydown", this.onKeydown);
     this.$refs.mainslide.addEventListener("mousewheel", this.onMouseWheel);
   },
   beforeDestroy() {
-    document.removeEventListener("keyup", this.onKeyup);
+    document.removeEventListener("keydown", this.onKeydown);
     this.$refs.mainslide.removeEventListener("mousewheel", this.onMouseWheel);
   },
   methods: {
     ...mapMutations(["SET_CURRENT"]),
-    onKeyup(e) {
+    onKeydown(e) {
       const prevKeyCodes = [33, 37, 38];
       const nextKeyCodes = [34, 39, 40];
       if (prevKeyCodes.includes(e.keyCode)) this.prev();
@@ -211,6 +211,9 @@ export default {
     justify-content: center;
     .icon-fullscreen-wrapper {
       display: none;
+    }
+    img {
+      height: 100%;
     }
   }
 }
