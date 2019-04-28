@@ -56,7 +56,7 @@
         <div ref="slider" class="slider" @dblclick="toggleFullScreen">
           <app-progress :progress="presentationProgress" />
           <img :src="slides[currentSlide]" />
-          <div class="icon-fullscreen-wrapper">
+          <div class="icon-fullscreen-wrapper" @click.stop="toggleFullScreen">
             <md-icon class="icon-fullscreen md-size-2x">fullscreen</md-icon>
           </div>
         </div>
@@ -329,6 +329,7 @@ export default {
   }
 }
 .icon-fullscreen-wrapper {
+  cursor: pointer;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.4);
   opacity: 0;
