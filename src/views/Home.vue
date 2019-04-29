@@ -6,6 +6,7 @@
     </div>
     <app-video-background @loaded="onVideoLoaded" />
     <app-select-folder :is-active="showFolderSelecter" />
+    <app-logo class="logo" :white="true" width="300px" />
     <div v-if="data" class="data-container">
       <app-card
         v-for="section in data.root"
@@ -42,11 +43,13 @@ import { plurals } from "@/models/helpers";
 /* Components */
 import AppVideoBackground from "@/components/AppVideoBackground";
 import AppSelectFolder from "@/components/AppSelectFolder";
+import AppLogo from "@/components/AppLogo";
 import AppCard from "@/components/AppCard";
 export default {
   components: {
     AppVideoBackground,
     AppSelectFolder,
+    AppLogo,
     AppCard
   },
   data: () => ({
@@ -137,6 +140,12 @@ export default {
 }
 .hide {
   opacity: 0;
+}
+.logo {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .card {
   flex-basis: 20vw;
