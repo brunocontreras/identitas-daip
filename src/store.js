@@ -6,9 +6,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    data: undefined,
-    current: undefined,
-    log: undefined
+    data: null,
+    current: null,
+    log: null
   },
   mutations: {
     SET_DATA: (state, data) => {
@@ -26,6 +26,10 @@ export default new Vuex.Store({
       const { data, log } = readRootDirectory(path);
       commit("SET_DATA", data);
       commit("SET_LOG", log);
+    },
+    CLEAN_DATA: ({ commit }) => {
+      commit("SET_DATA", null);
+      commit("SET_LOG", null);
     }
   }
 });

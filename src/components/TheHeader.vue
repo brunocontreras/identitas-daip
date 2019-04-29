@@ -13,11 +13,25 @@
         <span v-else :key="`name${i}`" class="bc-last">{{ link.name }}</span>
       </template>
     </app-breadcrumb>
+    <div class="tools">
+      <div>
+        <md-button class="md-icon-button" :md-ripple="false" @click="removeFolder">
+          <md-icon>{{ data ? "folder" : "folder_open" }}</md-icon>
+        </md-button>
+        <md-tooltip md-direction="bottom">Seleccionar carpeta</md-tooltip>
+      </div>
+      <div v-if="false">
+        <md-button class="md-icon-button" :md-ripple="false">
+          <md-icon>update</md-icon>
+        </md-button>
+        <md-tooltip md-direction="bottom">Nueva actualización</md-tooltip>
+      </div>
+    </div>
   </header>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import TheLogo from "@/components/TheLogo";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
 import AppArrow from "@/components/AppArrow";
@@ -31,7 +45,15 @@ export default {
     height: 60
   }),
   computed: {
-    ...mapState(["current"])
+    ...mapState(["data", "current"])
+  },
+  methods: {
+    ...mapActions(["CLEAN_DATA"]),
+    removeFolder() {
+      localStorage.removeItem("root");
+      this.CLEAN_DATA();
+      this.$router.push("/");
+    }
   }
 };
 </script>
@@ -98,5 +120,15 @@ export default {
     transition-duration: 0.25s;
     transition-property: fill, stroke;
   }
+}
+.tools {
+  flex-grow: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.md-icon-button ::v-deep .md-ripple {
+  margin-left: -8px;
 }
 </style>
