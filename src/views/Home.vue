@@ -6,7 +6,7 @@
     </div>
     <app-video-background @loaded="onVideoLoaded" />
     <app-select-folder :is-active="showFolderSelecter" />
-    <app-logo class="logo" :white="true" width="300px" />
+    <app-logo class="logo" :white="true" />
     <div v-if="data" class="data-container">
       <app-card
         v-for="section in data.root"
@@ -145,6 +145,10 @@ export default {
   position: absolute;
   top: 100px;
   left: 50%;
+  opacity: 0.5;
+  max-width: 300px;
+  width: 25vmin;
+  min-width: 150px;
   transform: translateX(-50%);
 }
 .card {
