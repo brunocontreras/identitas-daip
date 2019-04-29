@@ -49,7 +49,6 @@ export default {
 .avatars {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
 }
 .avatar {
   background-color: #e9e9e9;
