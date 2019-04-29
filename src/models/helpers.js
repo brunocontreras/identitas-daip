@@ -31,6 +31,8 @@ const getFiles = path =>
     .filter(name => isFile(join(path, name)))
     .sort(naturalCompare);
 
+const protocolFile = file => `file://${file}`;
+
 const normalize = text => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const isEqual = (name1, name2) => normalize(name1.toLowerCase()) === normalize(name2.toLowerCase());
 const removeExtension = name => name.replace(/\.[^/.]+$/, "");
@@ -49,6 +51,7 @@ export {
   isFile,
   getDirectories,
   getFiles,
+  protocolFile,
   normalize,
   isEqual,
   removeExtension,

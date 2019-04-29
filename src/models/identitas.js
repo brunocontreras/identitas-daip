@@ -1,5 +1,5 @@
 import { join } from "path";
-import { getDirectories, getFiles, isFile, isEqual, extractName } from "./helpers";
+import { getDirectories, getFiles, isFile, isEqual, extractName, protocolFile } from "./helpers";
 import config from "./config";
 import { TYPES } from "./types";
 import { readFileSync } from "fs";
@@ -102,7 +102,7 @@ const readAudioDir = ({ path, lyricsDirPath, parent }) => {
   if (files) {
     return files.map(name => {
       const audio = newAudio({
-        path: join(path, name),
+        path: protocolFile(join(path, name)),
         lyricsDirPath,
         name: extractName(name),
         parent
@@ -117,7 +117,7 @@ const readVideoDir = ({ path, parent }) => {
   if (files) {
     return files.map(name => {
       const video = newVideo({
-        path: join(path, name),
+        path: protocolFile(join(path, name)),
         name: extractName(name),
         parent
       });
@@ -136,7 +136,7 @@ const readVideoDir = ({ path, parent }) => {
 const readSlides = ({ path, name }) => {
   const files = getFiles(path);
   if (!files) warningNoSlides(name);
-  else return files.map(name => join(path, name));
+  else return files.map(name => protocolFile(join(path, name)));
 };
 
 const readPresentation = ({ path, name, parent }) => {
