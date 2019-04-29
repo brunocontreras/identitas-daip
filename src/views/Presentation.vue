@@ -58,6 +58,7 @@
           <img :src="slides[currentSlide]" />
           <div class="icon-fullscreen-wrapper" @click.stop="toggleFullScreen">
             <md-icon class="icon-fullscreen md-size-2x">fullscreen</md-icon>
+            <md-tooltip md-direction="top">Pantalla completa</md-tooltip>
           </div>
         </div>
       </div>
