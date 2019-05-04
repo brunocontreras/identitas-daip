@@ -3,6 +3,7 @@
     v-if="course"
     :item="course"
     :get-image="getImage"
+    :get-title="getTitle"
     :get-subtitle="getSubtitle"
     :animation="true"
     @click="goToPresentation"
@@ -11,7 +12,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { plurals } from "@/models/helpers";
+// import { plurals } from "@/models/helpers";
 import AppGrid from "@/components/AppGrid";
 export default {
   components: {
@@ -39,13 +40,17 @@ export default {
     getImage(presentation) {
       return presentation.slides[0];
     },
-    getSubtitle(presentation) {
-      const strings = [
-        plurals(presentation.slides, "diapositiva", "diapositivas"),
-        plurals(presentation.videos, "video", "videos"),
-        plurals(presentation.audios, "audio", "audios")
-      ];
-      return strings.join(" / ");
+    getTitle() {
+      return "";
+    },
+    getSubtitle() {
+      // const strings = [
+      //   plurals(presentation.slides, "diapositiva", "diapositivas"),
+      //   plurals(presentation.videos, "video", "videos"),
+      //   plurals(presentation.audios, "audio", "audios")
+      // ];
+      // return strings.join(" / ");
+      return "";
     }
   }
 };

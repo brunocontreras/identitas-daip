@@ -1,5 +1,5 @@
 <template>
-  <app-grid v-if="section" :item="section" :get-subtitle="getSubtitle" @click="goToCourse">
+  <app-grid v-if="section" :item="section" :get-title="getTitle" :get-subtitle="getSubtitle" @click="goToCourse">
     <template v-slot="{ item }">
       <div class="avatars">
         <md-avatar v-for="presentation in item.children" :key="`presentation${presentation.id}`" class="avatar">
@@ -37,6 +37,9 @@ export default {
     ...mapMutations(["SET_CURRENT"]),
     goToCourse(course) {
       this.$router.push(`/course/${course.id}`);
+    },
+    getTitle(course) {
+      return course.name;
     },
     getSubtitle(course) {
       return `${course.children.length} presentaciones`;

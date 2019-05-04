@@ -8,7 +8,7 @@
         :key="child.name"
         ref="appcard"
         class="card"
-        :title="child.name"
+        :title="getTitle(child)"
         :image="getImage(child)"
         :subtitle="getSubtitle(child)"
         @click="$emit('click', child)"
@@ -36,6 +36,10 @@ export default {
     getImage: {
       type: Function,
       default: () => ""
+    },
+    getTitle: {
+      type: Function,
+      required: true
     },
     getSubtitle: {
       type: Function,
