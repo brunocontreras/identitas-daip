@@ -104,6 +104,9 @@ autoUpdater.on("checking-for-update", () => {
 });
 autoUpdater.on("update-available", () => {
   sendStatusToWindow("Update available.");
+  if (process.platform === "darwin") {
+    win.webContents.send("download");
+  }
 });
 autoUpdater.on("update-not-available", () => {
   sendStatusToWindow("Update not available.");
@@ -119,7 +122,9 @@ autoUpdater.on("download-progress", progressObj => {
 });
 autoUpdater.on("update-downloaded", () => {
   sendStatusToWindow("Update downloaded");
-  win.webContents.send("downloaded");
+  if (process.platform !== "darwin") {
+    win.webContents.send("downloaded");
+  }
 });
 
 ipcMain.on("update", () => {

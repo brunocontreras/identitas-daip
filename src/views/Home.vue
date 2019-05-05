@@ -1,9 +1,5 @@
 <template>
   <div class="home">
-    <div v-if="message || newUpdate" class="message">
-      <p>{{ message }}</p>
-      <button v-if="newUpdate" @click="update">Actualizar</button>
-    </div>
     <app-video-background @loaded="onVideoLoaded" />
     <app-select-folder :is-active="showFolderSelecter" />
     <app-logo class="logo" :white="true" />
@@ -37,7 +33,6 @@
 
 <script>
 /* Logic */
-import { ipcRenderer } from "electron";
 import { mapState, mapMutations, mapActions } from "vuex";
 import { plurals } from "@/models/helpers";
 /* Components */
@@ -66,12 +61,6 @@ export default {
   },
   created() {
     this.SET_CURRENT(null);
-    ipcRenderer.on("message", (event, text) => {
-      this.message = text;
-    });
-    ipcRenderer.on("downloaded", () => {
-      this.newUpdate = true;
-    });
     const root = localStorage.getItem("root");
     if (root && !this.data) this.READ_ROOT_DIRECTORY(root);
   },
@@ -91,9 +80,6 @@ export default {
           params: { id: section.id }
         });
       }
-    },
-    update() {
-      ipcRenderer.send("update");
     },
     getSectionImage(url) {
       return require(`@/assets/${url}`);

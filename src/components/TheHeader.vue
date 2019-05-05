@@ -20,9 +20,9 @@
         </md-button>
         <md-tooltip md-direction="bottom">Seleccionar carpeta</md-tooltip>
       </div>
-      <div v-if="false">
-        <md-button class="md-icon-button" :md-ripple="false">
-          <md-icon>update</md-icon>
+      <div v-if="updateAvailable">
+        <md-button class="md-icon-button" :md-ripple="false" @click="update">
+          <md-icon>arrow_downward</md-icon>
         </md-button>
         <md-tooltip md-direction="bottom">Nueva actualización</md-tooltip>
       </div>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { ipcRenderer, shell } from "electron";
 import { mapState, mapActions } from "vuex";
 import TheLogo from "@/components/TheLogo";
 import AppBreadcrumb from "@/components/AppBreadcrumb";
@@ -42,10 +43,19 @@ export default {
     AppArrow
   },
   data: () => ({
-    height: 60
+    height: 60,
+    updateAvailable: false
   }),
   computed: {
     ...mapState(["data", "current"])
+  },
+  created() {
+    ipcRenderer.on("downloaded", () => {
+      this.updateAvailable = true;
+    });
+    ipcRenderer.on("download", () => {
+      this.updateAvailable = true;
+    });
   },
   methods: {
     ...mapActions(["CLEAN_DATA"]),
@@ -53,6 +63,13 @@ export default {
       localStorage.removeItem("root");
       this.CLEAN_DATA();
       this.$router.push("/");
+    },
+    update() {
+      if (process.platform === "darwin") {
+        shell.openExternal("https://identitas.netlify.com/");
+      } else {
+        ipcRenderer.send("update");
+      }
     }
   }
 };
