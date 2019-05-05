@@ -55,7 +55,11 @@
       <div class="slider-wrapper">
         <div ref="slider" class="slider" @dblclick="toggleFullScreen">
           <app-progress :progress="presentationProgress" />
-          <img :src="slides[currentSlide]" />
+          <transition name="fade">
+            <template v-for="(slide, i) in slides">
+              <img v-if="i === currentSlide" :key="i" :src="slide" />
+            </template>
+          </transition>
           <div class="icon-fullscreen-wrapper" @click.stop="toggleFullScreen">
             <md-icon class="icon-fullscreen md-size-2x">fullscreen</md-icon>
             <md-tooltip md-direction="top">Pantalla completa</md-tooltip>

@@ -23,5 +23,6 @@ export default {
   height: 4px;
   transition: transform 0.5s $ease-quart-out;
   transform-origin: 0 50%;
+  z-index: 1;
 }
 </style>
