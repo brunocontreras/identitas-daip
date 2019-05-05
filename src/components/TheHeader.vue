@@ -15,15 +15,15 @@
     </app-breadcrumb>
     <div class="tools">
       <div>
-        <md-button class="md-icon-button" :md-ripple="false" @click="removeFolder">
+        <button class="tool-button" @click="removeFolder">
           <md-icon>{{ data ? "folder" : "folder_open" }}</md-icon>
-        </md-button>
+        </button>
         <md-tooltip md-direction="bottom">Seleccionar carpeta</md-tooltip>
       </div>
       <div v-if="updateAvailable">
-        <md-button class="md-icon-button" :md-ripple="false" @click="update">
+        <button class="tool-button" @click="update">
           <md-icon>arrow_downward</md-icon>
-        </md-button>
+        </button>
         <md-tooltip md-direction="bottom">Nueva actualización</md-tooltip>
       </div>
     </div>
@@ -65,11 +65,11 @@ export default {
       this.$router.push("/");
     },
     update() {
-      if (process.platform === "darwin") {
-        shell.openExternal("https://identitas.netlify.com/");
-      } else {
-        ipcRenderer.send("update");
-      }
+      // if (process.platform === "darwin") {
+      shell.openExternal("https://identitas.netlify.com/");
+      // } else {
+      //   ipcRenderer.send("update");
+      // }
     }
   }
 };
@@ -144,8 +144,25 @@ export default {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding-right: 10px;
 }
-.md-icon-button ::v-deep .md-ripple {
-  margin-left: -8px;
+.tool-button {
+  background: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  margin: 0 3px;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  &:hover,
+  &:active,
+  &:focus {
+    background: $color-main;
+    .md-icon {
+      color: #fff !important;
+    }
+  }
 }
 </style>
