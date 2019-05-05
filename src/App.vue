@@ -152,6 +152,5 @@ h1 {
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-  position: absolute;
 }
 </style>

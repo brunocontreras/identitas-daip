@@ -55,7 +55,7 @@
       <div class="slider-wrapper">
         <div ref="slider" class="slider" @dblclick="toggleFullScreen">
           <app-progress :progress="presentationProgress" />
-          <transition name="fade">
+          <transition name="fadeslide">
             <template v-for="(slide, i) in slides">
               <img v-if="i === currentSlide" :key="i" :src="slide" />
             </template>
@@ -392,5 +392,14 @@ export default {
   text-align: center;
   padding: 15rem 5rem;
   white-space: pre-wrap;
+}
+.fadeslide-enter-active,
+.fadeslide-leave-active {
+  transition: opacity 0.25s;
+}
+.fadeslide-enter,
+.fadeslide-leave-to {
+  opacity: 0.5;
+  position: absolute;
 }
 </style>
