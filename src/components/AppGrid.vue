@@ -8,10 +8,11 @@
         :key="child.name"
         ref="appcard"
         class="card"
+        :disabled="child.disabled"
         :title="getTitle(child)"
         :image="getImage(child)"
         :subtitle="getSubtitle(child)"
-        @click="$emit('click', child)"
+        @click="!child.disabled ? $emit('click', child) : null"
       >
         <slot :item="child" />
       </app-card>

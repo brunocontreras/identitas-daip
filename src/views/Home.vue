@@ -5,16 +5,16 @@
     <app-logo class="logo" :white="true" />
     <div v-if="data" class="data-container">
       <app-card
-        v-for="section in data.root"
-        :key="section.name"
+        v-for="node in data.nodes"
+        :key="node.name"
         class="card"
-        :image="getSectionImage(section.image)"
-        :disabled="section.disabled"
-        :title="section.name"
-        :subtitle="getSectionCourses(section)"
+        :image="getImage(node.image)"
+        :disabled="node.disabled"
+        :title="node.name"
+        :subtitle="node.description"
         :init-delay="true"
         :init-animation="true"
-        @click="goTo(section)"
+        @click="goTo(node)"
       />
       <!--
       <ul>
@@ -34,7 +34,6 @@
 <script>
 /* Logic */
 import { mapState, mapMutations, mapActions } from "vuex";
-import { plurals } from "@/models/helpers";
 /* Components */
 import AppVideoBackground from "@/components/AppVideoBackground";
 import AppSelectFolder from "@/components/AppSelectFolder";
@@ -73,19 +72,16 @@ export default {
     onLoadingFinished() {
       this.isLoading = false;
     },
-    goTo(section) {
-      if (!section.disabled) {
+    goTo(node) {
+      if (!node.disabled) {
         this.$router.push({
-          name: "section",
-          params: { id: section.id }
+          name: node.type.toLowerCase(),
+          params: { id: node.id }
         });
       }
     },
-    getSectionImage(url) {
+    getImage(url) {
       return require(`@/assets/${url}`);
-    },
-    getSectionCourses(section) {
-      return plurals(section.children, "curso", "cursos");
     }
   }
 };

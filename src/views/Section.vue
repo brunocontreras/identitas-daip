@@ -1,7 +1,14 @@
 <template>
-  <app-grid v-if="section" :item="section" :get-title="getTitle" :get-subtitle="getSubtitle" @click="goToCourse">
+  <app-grid
+    v-if="section"
+    :item="section"
+    :get-image="getImage"
+    :get-title="getTitle"
+    :get-subtitle="getSubtitle"
+    @click="goTo"
+  >
     <template v-slot="{ item }">
-      <div class="avatars">
+      <div v-if="!item.image" class="avatars">
         <md-avatar v-for="presentation in item.children" :key="`presentation${presentation.id}`" class="avatar">
           <app-image :src="presentation.slides[0]" />
         </md-avatar>
@@ -35,14 +42,17 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_CURRENT"]),
-    goToCourse(course) {
-      this.$router.push(`/course/${course.id}`);
+    goTo(item) {
+      this.$router.push(`/${item.type.toLowerCase()}/${item.id}`);
     },
-    getTitle(course) {
-      return course.name;
+    getTitle(item) {
+      return item.name;
     },
-    getSubtitle(course) {
-      return `${course.children.length} presentaciones`;
+    getSubtitle(item) {
+      return item.description;
+    },
+    getImage(item) {
+      return item.image ? require(`@/assets/${item.image}`) : null;
     }
   }
 };
