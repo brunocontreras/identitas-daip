@@ -56,12 +56,12 @@ export default [
     type: TYPES.SECTION,
     children: [
       {
-        name: "CIEF",
+        name: "Cursos Intensivos de Educación Familiar",
         image: "img/formacion/cief.jpg",
         type: TYPES.SECTION
       },
       {
-        name: "CBEP",
+        name: "Cursos Básicos de Educación Personalizada",
         image: "img/formacion/cbep.jpg",
         type: TYPES.SECTION
       }
