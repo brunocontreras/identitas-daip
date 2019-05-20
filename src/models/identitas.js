@@ -231,8 +231,7 @@ const readNodes = ({ nodes, path, parent }) => {
       const courses = newNode.disabled ? 0 : newNode.children;
       newNode.description = plurals(courses, "curso", "cursos");
     } else if (node.type === TYPES.SECTION) newNode.description = plurals(newNode.children, "curso", "cursos");
-    else if (node.type === TYPES.COURSE)
-      newNode.description = plurals(newNode.children, "presentación", "presentaciones");
+    else if (node.type === TYPES.COURSE) newNode.description = plurals(newNode.children, "presentación", "presentaciones");
     return newNode;
   });
 };
