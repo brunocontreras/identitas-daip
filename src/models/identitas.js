@@ -220,13 +220,17 @@ const readNodes = ({ nodes, path, parent }) => {
     const newNode = constructor({ name: node.name, parent, disabled, image: node.image });
     const options = { path: join(path, node.name), parent: newNode };
     if (!disabled) {
-      if (node.children) newNode.children = readNodes({ nodes: node.children, ...options });
-      else if (node.type === TYPES.SECTION) newNode.children = readCourses(options);
+      if (node.children) {
+        newNode.children = readNodes({ nodes: node.children, ...options });
+        newNode.disabled = newNode.children.every(x => x.disabled);
+      } else if (node.type === TYPES.SECTION) newNode.children = readCourses(options);
       else if (node.type === TYPES.COURSE) newNode.children = readPresentations(options);
       else newNode.children = [];
     }
-    if (node.children) newNode.description = plurals(newNode.children, "curso", "cursos");
-    else if (node.type === TYPES.SECTION) newNode.description = plurals(newNode.children, "curso", "cursos");
+    if (node.children) {
+      const courses = newNode.disabled ? 0 : newNode.children;
+      newNode.description = plurals(courses, "curso", "cursos");
+    } else if (node.type === TYPES.SECTION) newNode.description = plurals(newNode.children, "curso", "cursos");
     else if (node.type === TYPES.COURSE)
       newNode.description = plurals(newNode.children, "presentación", "presentaciones");
     return newNode;
