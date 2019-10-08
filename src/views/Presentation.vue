@@ -10,14 +10,8 @@
         </div>
       </md-tab>
       <md-tab id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
-        <md-switch v-model="showAllVideos" class="md-primary">Todos los vídeos / {{ data.videos.length }}</md-switch>
-        <md-progress-spinner
-          v-if="fetchingAllVideos"
-          class="md-primary spinner"
-          :md-diameter="30"
-          :md-stroke="3"
-          md-mode="indeterminate"
-        />
+        <md-switch v-model="showAllVideos" class="md-primary">Mostrar todos los vídeos / {{ data.videos.length }}</md-switch>
+        <md-progress-spinner v-if="fetchingAllVideos" class="md-primary spinner" :md-diameter="30" :md-stroke="3" md-mode="indeterminate" />
         <template v-else-if="videos.length">
           <app-card
             v-for="video in videos"
@@ -30,14 +24,8 @@
         <md-empty-state v-else class="empty-state" md-icon="movie" md-label="No hay ningún vídeo" />
       </md-tab>
       <md-tab id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
-        <md-switch v-model="showAllAudios" class="md-primary">Todos los audios / {{ data.audios.length }}</md-switch>
-        <md-progress-spinner
-          v-if="fetchingAllAudios"
-          class="md-primary spinner"
-          :md-diameter="30"
-          :md-stroke="3"
-          md-mode="indeterminate"
-        />
+        <md-switch v-model="showAllAudios" class="md-primary">Mostrar todos los audios / {{ data.audios.length }}</md-switch>
+        <md-progress-spinner v-if="fetchingAllAudios" class="md-primary spinner" :md-diameter="30" :md-stroke="3" md-mode="indeterminate" />
         <template v-else-if="audios.length">
           <app-card
             v-for="audio in audios"
