@@ -20,9 +20,7 @@ export default {
   methods: {
     ...mapActions(["READ_ROOT_DIRECTORY"]),
     selectedDirectory(paths) {
-      if (paths === undefined) {
-        console.warn("No se escogió ninguna carpeta");
-      } else {
+      if (paths !== undefined) {
         const dir = paths[0];
         localStorage.setItem("root", dir);
         this.READ_ROOT_DIRECTORY(dir);

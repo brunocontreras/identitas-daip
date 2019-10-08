@@ -255,7 +255,6 @@ const readCourses = ({ path, breadCrumb }) => {
 };
 
 const readRootDirectory = path => {
-  console.time("identitas");
   const directories = getDirectories(path);
   if (!directories) warningRootNoContent();
   else {
@@ -288,7 +287,6 @@ const readRootDirectory = path => {
       }
     });
     checkData();
-    console.timeEnd("identitas");
     return {
       data,
       log

@@ -1,12 +1,5 @@
 <template>
-  <app-grid
-    v-if="section"
-    :item="section"
-    :get-image="getImage"
-    :get-title="getTitle"
-    :get-subtitle="getSubtitle"
-    @click="goTo"
-  >
+  <app-grid v-if="section" :item="section" :get-image="getImage" :get-title="getTitle" :get-subtitle="getSubtitle" @click="goTo">
     <template v-slot="{ item }">
       <div v-if="!item.image" class="avatars">
         <md-avatar v-for="presentation in item.children" :key="`presentation${presentation.id}`" class="avatar">

@@ -237,11 +237,9 @@ const readNodes = ({ nodes, path, parent }) => {
 };
 
 const readRootDirectory = path => {
-  console.time("identitas");
   const directories = getDirectories(path);
   if (!directories) warningRootNoContent();
   else data.nodes = readNodes({ nodes: config, path, parent: null });
-  console.timeEnd("identitas");
   return { data, log };
 };
 
