@@ -215,7 +215,7 @@ const readCourses = ({ path, parent }) => {
 const readNodes = ({ nodes, path, parent }) => {
   const directories = getDirectories(path);
   return nodes.map(node => {
-    const disabled = !directories.find(x => x === node.name);
+    const disabled = !directories.find(x => x.toLowerCase() === node.name.toLowerCase());
     const constructor = node.type === TYPES.SECTION ? newSection : newCourse;
     const newNode = constructor({ name: node.name, parent, disabled, image: node.image });
     const options = { path: join(path, node.name), parent: newNode };
