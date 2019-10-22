@@ -9,17 +9,17 @@ export default [
       {
         name: "EDEP",
         image: "img/expertos/edep.jpg",
-        type: TYPES.COURSE
+        type: TYPES.SECTION
       },
       {
         name: "DAIP",
         image: "img/expertos/daip.jpg",
-        type: TYPES.COURSE
+        type: TYPES.SECTION
       },
       {
         name: "Mentoring familiar",
         image: "img/expertos/mentoring_familiar.jpg",
-        type: TYPES.COURSE
+        type: TYPES.SECTION
       }
     ]
   },

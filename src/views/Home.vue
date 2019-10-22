@@ -32,9 +32,7 @@
 </template>
 
 <script>
-/* Logic */
 import { mapState, mapMutations, mapActions } from "vuex";
-/* Components */
 import AppVideoBackground from "@/components/AppVideoBackground";
 import AppSelectFolder from "@/components/AppSelectFolder";
 import AppLogo from "@/components/AppLogo";

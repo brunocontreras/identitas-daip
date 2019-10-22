@@ -50,9 +50,9 @@ export default {
     ...mapState(["data", "current"])
   },
   created() {
-    ipcRenderer.on("downloaded", () => {
-      this.updateAvailable = true;
-    });
+    // ipcRenderer.on("downloaded", () => {
+    //   this.updateAvailable = true;
+    // });
     ipcRenderer.on("download", () => {
       this.updateAvailable = true;
     });

@@ -1,6 +1,6 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, ipcMain } from "electron";
+import { app, protocol, BrowserWindow } from "electron";
 import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
@@ -99,30 +99,31 @@ function sendStatusToWindow(text) {
   win.webContents.send("message", text);
 }
 
-autoUpdater.on("checking-for-update", () => {
-  sendStatusToWindow("Checking for update...");
-});
+// autoUpdater.on("checking-for-update", () => {
+//   sendStatusToWindow("Checking for update...");
+// });
 autoUpdater.on("update-available", () => {
   sendStatusToWindow("Update available.");
   win.webContents.send("download");
 });
-autoUpdater.on("update-not-available", () => {
-  sendStatusToWindow("Update not available.");
-});
-autoUpdater.on("error", err => {
-  sendStatusToWindow("Error in auto-updater. " + err);
-});
-autoUpdater.on("download-progress", progressObj => {
-  let log_message = "Download speed: " + progressObj.bytesPerSecond;
-  log_message = log_message + " - Downloaded " + progressObj.percent + "%";
-  log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
-  sendStatusToWindow(log_message);
-});
-autoUpdater.on("update-downloaded", () => {
-  sendStatusToWindow("Update downloaded");
-  win.webContents.send("downloaded");
-});
+// Se comenta para que no actualize automáticamente en Windows.
+// autoUpdater.on("update-not-available", () => {
+//   sendStatusToWindow("Update not available.");
+// });
+// autoUpdater.on("error", err => {
+//   sendStatusToWindow("Error in auto-updater. " + err);
+// });
+// autoUpdater.on("download-progress", progressObj => {
+//   let log_message = "Download speed: " + progressObj.bytesPerSecond;
+//   log_message = log_message + " - Downloaded " + progressObj.percent + "%";
+//   log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
+//   sendStatusToWindow(log_message);
+// });
+// autoUpdater.on("update-downloaded", () => {
+//   sendStatusToWindow("Update downloaded");
+//   win.webContents.send("downloaded");
+// });
 
-ipcMain.on("update", () => {
-  autoUpdater.quitAndInstall();
-});
+// ipcMain.on("update", () => {
+//   autoUpdater.quitAndInstall();
+// });
