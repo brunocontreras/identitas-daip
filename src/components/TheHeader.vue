@@ -14,17 +14,12 @@
       </template>
     </app-breadcrumb>
     <div class="tools">
+      <button v-if="updateAvailable" class="button" @click="update">Nueva actualización</button>
       <div>
         <button class="tool-button" @click="removeFolder">
           <md-icon>{{ data ? "folder" : "folder_open" }}</md-icon>
         </button>
         <md-tooltip md-direction="bottom">Seleccionar carpeta</md-tooltip>
-      </div>
-      <div v-if="updateAvailable">
-        <button class="tool-button" @click="update">
-          <md-icon>arrow_downward</md-icon>
-        </button>
-        <md-tooltip md-direction="bottom">Nueva actualización</md-tooltip>
       </div>
     </div>
   </header>
@@ -163,6 +158,25 @@ export default {
     .md-icon {
       color: #fff !important;
     }
+  }
+}
+.button {
+  height: 30px;
+  background-color: $color-main;
+  font-size: 1.15rem;
+  border-radius: 20px;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  margin: 0 3px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 1px;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: darken($color-main, 7.5%);
   }
 }
 </style>

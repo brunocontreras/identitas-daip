@@ -52,6 +52,7 @@ body {
   overflow: hidden;
   font-size: 1.4rem;
 }
+button,
 input {
   font-family: inherit;
 }
