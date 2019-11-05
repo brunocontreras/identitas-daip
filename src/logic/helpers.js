@@ -22,13 +22,14 @@ const naturalCompare = (a, b) => {
 
 const isDirectory = path => lstatSync(path).isDirectory();
 const isFile = path => lstatSync(path).isFile();
+const isHiddenFile = name => /^\./.test(name);
 const getDirectories = path =>
   readdirSync(path)
     .filter(name => isDirectory(join(path, name)))
     .sort(naturalCompare);
 const getFiles = path =>
   readdirSync(path)
-    .filter(name => isFile(join(path, name)))
+    .filter(name => isFile(join(path, name)) && !isHiddenFile(name))
     .sort(naturalCompare);
 
 const protocolFile = file => `file://${file}`;

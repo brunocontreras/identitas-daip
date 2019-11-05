@@ -12,7 +12,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-// import { plurals } from "@/models/helpers";
+// import { plurals } from "@/logic/helpers";
 import AppGrid from "@/components/AppGrid";
 export default {
   components: {

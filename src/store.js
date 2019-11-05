@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import readRootDirectory from "@/models/identitas";
+import readRootDirectory from "@/logic/identitas";
 
 Vue.use(Vuex);
 

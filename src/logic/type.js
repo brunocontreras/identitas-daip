@@ -1,4 +1,4 @@
-const TYPES = {
+const TYPE = {
   SECTION: "Section",
   COURSE: "Course",
   PRESENTATION: "Presentation",
@@ -6,4 +6,4 @@ const TYPES = {
   AUDIO: "Audio"
 };
 
-export { TYPES };
+export { TYPE };

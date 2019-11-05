@@ -1,8 +1,8 @@
 import { join } from "path";
 import { getDirectories, getFiles, isFile, isEqual, extractName, protocolFile } from "./helpers";
 import config from "./config";
-import { TYPES } from "./types";
-import { plurals } from "@/models/helpers";
+import { TYPE } from "./type";
+import { plurals } from "@/logic/helpers";
 import { readFileSync } from "fs";
 // import ffprobe from 'ffprobe'
 // import ffprobeStatic from 'ffprobe-static'
@@ -62,27 +62,27 @@ const warningNoSlides = name => log.push(`La presentación ${name} no tiene diap
 
 // Constructores
 const newSection = ({ name, parent, disabled, image }) => {
-  const section = { id: sectionId++, name, parent, type: TYPES.SECTION, disabled, image };
+  const section = { id: sectionId++, name, parent, type: TYPE.SECTION, disabled, image };
   data.sections.push(section);
   return section;
 };
 const newCourse = ({ name, parent, disabled, image }) => {
-  const course = { id: courseId++, name, parent, type: TYPES.COURSE, disabled, image };
+  const course = { id: courseId++, name, parent, type: TYPE.COURSE, disabled, image };
   data.courses.push(course);
   return course;
 };
 const newPresentation = ({ path, name, parent }) => {
-  const presentation = { id: presentationId++, path, name, parent, type: TYPES.PRESENTATION };
+  const presentation = { id: presentationId++, path, name, parent, type: TYPE.PRESENTATION };
   data.presentations.push(presentation);
   return presentation;
 };
 const newVideo = ({ path, name, parent }) => {
-  const video = { id: videoId++, path, name, parent, type: TYPES.VIDEO };
+  const video = { id: videoId++, path, name, parent, type: TYPE.VIDEO };
   data.videos.push(video);
   return video;
 };
 const newAudio = ({ path, lyricsDirPath, name, parent }) => {
-  const audio = { id: audioId++, path, name, parent, type: TYPES.AUDIO };
+  const audio = { id: audioId++, path, name, parent, type: TYPE.AUDIO };
   const lyricsFile = `${name}.txt`;
   const lyricsPath = join(lyricsDirPath, lyricsFile);
   if (isFile(lyricsPath)) {
@@ -199,7 +199,7 @@ const readCourses = ({ path, parent }) => {
 
 //       item.disabled = false;
 //       const options = { path: join(path, name), parent: item };
-//       if (item.type === TYPES.SECTION) {
+//       if (item.type === TYPE.SECTION) {
 //         data.sections.push(item);
 //         item.children = readCourses(options);
 //       } else {
@@ -216,27 +216,28 @@ const readNodes = ({ nodes, path, parent }) => {
   const directories = getDirectories(path);
   return nodes.map(node => {
     const disabled = !directories.find(x => isEqual(x, node.name));
-    const constructor = node.type === TYPES.SECTION ? newSection : newCourse;
+    const constructor = node.type === TYPE.SECTION ? newSection : newCourse;
     const newNode = constructor({ name: node.name, parent, disabled, image: node.image });
     const options = { path: join(path, node.name), parent: newNode };
     if (!disabled) {
       if (node.children) {
         newNode.children = readNodes({ nodes: node.children, ...options });
         newNode.disabled = newNode.children.every(x => x.disabled);
-      } else if (node.type === TYPES.SECTION) newNode.children = readCourses(options);
-      else if (node.type === TYPES.COURSE) newNode.children = readPresentations(options);
+      } else if (node.type === TYPE.SECTION) newNode.children = readCourses(options);
+      else if (node.type === TYPE.COURSE) newNode.children = readPresentations(options);
       else newNode.children = [];
     }
     if (node.children) {
       const courses = newNode.disabled ? 0 : newNode.children;
       newNode.description = plurals(courses, "curso", "cursos");
-    } else if (node.type === TYPES.SECTION) newNode.description = plurals(newNode.children, "curso", "cursos");
-    else if (node.type === TYPES.COURSE) newNode.description = plurals(newNode.children, "presentación", "presentaciones");
+    } else if (node.type === TYPE.SECTION) newNode.description = plurals(newNode.children, "curso", "cursos");
+    else if (node.type === TYPE.COURSE) newNode.description = plurals(newNode.children, "presentación", "presentaciones");
     return newNode;
   });
 };
 
 const readRootDirectory = path => {
+  debugger;
   const directories = getDirectories(path);
   if (!directories) warningRootNoContent();
   else data.nodes = readNodes({ nodes: config, path, parent: null });
