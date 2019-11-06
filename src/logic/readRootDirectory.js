@@ -1,6 +1,6 @@
 import { join } from "path";
 import { getDirectories, getFiles, isFile, isEqual, extractName, protocolFile } from "./helpers";
-import config from "./config";
+import identitasStructure from "../../identitas";
 import { TYPE } from "./type";
 import { plurals } from "@/logic/helpers";
 import { readFileSync } from "fs";
@@ -20,8 +20,8 @@ let presentationId = 1;
 let videoId = 1;
 let audioId = 1;
 
-const data = {
-  nodes: [],
+const identitas = {
+  tree: [],
   sections: [],
   courses: [],
   presentations: [],
@@ -44,7 +44,7 @@ const log = [];
 // }
 
 // Warnings
-const warningRootNoContent = () => log.push("La carpeta raíz no tiene contenido");
+// const warningRootNoContent = () => log.push("La carpeta raíz no tiene contenido");
 const warningNoContent = breadCrumb => log.push(`La carpeta ${breadCrumb.join(" > ")} no tiene contenido`);
 // const warningNoDirectory = directory => log.push(`No existe la carpeta '${directory}'`);
 const warningNoSlides = name => log.push(`La presentación ${name} no tiene diapositivas`);
@@ -62,23 +62,23 @@ const warningNoSlides = name => log.push(`La presentación ${name} no tiene diap
 
 // Constructores
 const newSection = ({ name, parent, disabled, image }) => {
-  const section = { id: sectionId++, name, parent, type: TYPE.SECTION, disabled, image };
-  data.sections.push(section);
+  const section = { id: sectionId++, name, parent, type: TYPE.SECTION, disabled, image, children: [] };
+  identitas.sections.push(section);
   return section;
 };
 const newCourse = ({ name, parent, disabled, image }) => {
-  const course = { id: courseId++, name, parent, type: TYPE.COURSE, disabled, image };
-  data.courses.push(course);
+  const course = { id: courseId++, name, parent, type: TYPE.COURSE, disabled, image, children: [] };
+  identitas.courses.push(course);
   return course;
 };
 const newPresentation = ({ path, name, parent }) => {
   const presentation = { id: presentationId++, path, name, parent, type: TYPE.PRESENTATION };
-  data.presentations.push(presentation);
+  identitas.presentations.push(presentation);
   return presentation;
 };
 const newVideo = ({ path, name, parent }) => {
   const video = { id: videoId++, path, name, parent, type: TYPE.VIDEO };
-  data.videos.push(video);
+  identitas.videos.push(video);
   return video;
 };
 const newAudio = ({ path, lyricsDirPath, name, parent }) => {
@@ -89,7 +89,7 @@ const newAudio = ({ path, lyricsDirPath, name, parent }) => {
     audio.lyricsPath = lyricsPath;
     audio.lyrics = readFileSync(lyricsPath);
   }
-  data.audios.push(audio);
+  identitas.audios.push(audio);
   return audio;
 };
 
@@ -212,36 +212,33 @@ const readCourses = ({ path, parent }) => {
 //   return { data, log };
 // };
 
-const readNodes = ({ nodes, path, parent }) => {
+const readTree = ({ tree, path, parent = null }) => {
   const directories = getDirectories(path);
-  return nodes.map(node => {
-    const disabled = !directories.find(x => isEqual(x, node.name));
+  return tree.map(node => {
+    const exists = directories.some(x => isEqual(x, node.name));
     const constructor = node.type === TYPE.SECTION ? newSection : newCourse;
-    const newNode = constructor({ name: node.name, parent, disabled, image: node.image });
-    const options = { path: join(path, node.name), parent: newNode };
-    if (!disabled) {
-      if (node.children) {
-        newNode.children = readNodes({ nodes: node.children, ...options });
-        newNode.disabled = newNode.children.every(x => x.disabled);
-      } else if (node.type === TYPE.SECTION) newNode.children = readCourses(options);
+    const newNode = constructor({ name: node.name, parent, disabled: !exists, image: node.image });
+    if (exists) {
+      const options = { path: join(path, node.name), parent: newNode };
+      if (node.children) newNode.children = readTree({ tree: node.children, ...options });
+      else if (node.type === TYPE.SECTION) newNode.children = readCourses(options);
       else if (node.type === TYPE.COURSE) newNode.children = readPresentations(options);
-      else newNode.children = [];
+      newNode.disabled = newNode.children.every(x => x.disabled);
     }
-    if (node.children) {
-      const courses = newNode.disabled ? 0 : newNode.children;
-      newNode.description = plurals(courses, "curso", "cursos");
-    } else if (node.type === TYPE.SECTION) newNode.description = plurals(newNode.children, "curso", "cursos");
-    else if (node.type === TYPE.COURSE) newNode.description = plurals(newNode.children, "presentación", "presentaciones");
+    const enabledChildren = newNode.children.filter(x => !x.disabled);
+    if (node.type === TYPE.SECTION) newNode.description = plurals(enabledChildren, "curso", "cursos");
+    if (node.type === TYPE.COURSE) newNode.description = plurals(enabledChildren, "presentación", "presentaciones");
     return newNode;
   });
 };
 
 const readRootDirectory = path => {
-  debugger;
-  const directories = getDirectories(path);
-  if (!directories) warningRootNoContent();
-  else data.nodes = readNodes({ nodes: config, path, parent: null });
-  return { data, log };
+  // Comprobación de que la carpeta raíz no esté vacía.
+  // const directories = getDirectories(path);
+  // if (!directories) warningRootNoContent();
+  // else
+  identitas.tree = readTree({ tree: identitasStructure, path });
+  return { data: identitas, log };
 };
 
 export default readRootDirectory;

@@ -1,4 +1,4 @@
-import { TYPE } from "./type";
+import { TYPE } from "./src/logic/type";
 
 export default [
   {

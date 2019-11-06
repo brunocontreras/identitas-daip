@@ -5,7 +5,7 @@
     <app-logo class="logo" :white="true" />
     <div v-if="data" class="data-container">
       <app-card
-        v-for="node in data.nodes"
+        v-for="node in data.tree"
         :key="node.name"
         class="card"
         :image="getImage(node.image)"
