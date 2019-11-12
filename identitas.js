@@ -180,14 +180,63 @@ export default [
     type: TYPE.SECTION,
     children: [
       {
-        name: "Cursos Intensivos de Educación Familiar",
+        name: "CIEF",
         image: "img/formacion/cief.jpg",
-        type: TYPE.SECTION
+        type: TYPE.SECTION,
+        children: [
+          {
+            name: "Educación de la sexualidad y el amor en la familia",
+            image: "img/formacion/cief/educacion_de_la_sexualidad.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "Cómo decir te quiero",
+            image: "img/formacion/cief/como_decir_te_quiero.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "9 lecciones para ser feliz",
+            image: "img/formacion/cief/lecciones_para_ser_feliz.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "Cómo sobrevivir a los adolescentes",
+            image: "img/formacion/cief/como_sobrevivir_a_los_adolescentes.jpg",
+            type: TYPE.COURSE
+          }
+        ]
       },
       {
-        name: "Cursos Básicos de Educación Personalizada",
+        name: "CBEP",
         image: "img/formacion/cbep.jpg",
-        type: TYPE.SECTION
+        type: TYPE.SECTION,
+        children: [
+          {
+            name: "Dirigir personas en las escuelas",
+            image: "img/formacion/cbep/dirigir_personas.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "La tutoría personal con padres y alumnos",
+            image: "img/formacion/cbep/tutoria_personal.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "La formación de los profesores encargados de curso",
+            image: "img/formacion/cbep/formacion_profesores_encargados.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "Los matrimonios encargados de curso",
+            image: "img/formacion/cbep/mecs.jpg",
+            type: TYPE.COURSE
+          },
+          {
+            name: "Aprender a amar",
+            image: "img/formacion/cbep/aprender_a_amar.jpg",
+            type: TYPE.COURSE
+          }
+        ]
       }
     ]
   },
