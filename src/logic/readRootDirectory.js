@@ -87,7 +87,7 @@ const newAudio = ({ path, lyricsDirPath, name, parent }) => {
   const lyricsPath = join(lyricsDirPath, lyricsFile);
   if (isFile(lyricsPath)) {
     audio.lyricsPath = lyricsPath;
-    audio.lyrics = readFileSync(lyricsPath);
+    audio.lyrics = readFileSync(lyricsPath, "utf8");
   }
   identitas.audios.push(audio);
   return audio;
