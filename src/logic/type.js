@@ -1,4 +1,5 @@
 const TYPE = {
+  BLOCK: "Block",
   SECTION: "Section",
   COURSE: "Course",
   PRESENTATION: "Presentation",

@@ -4,7 +4,7 @@ export default [
   {
     name: "Expertos",
     image: "img/expertos.jpg",
-    type: TYPE.SECTION,
+    type: TYPE.BLOCK,
     children: [
       {
         name: "EDEP",
@@ -177,7 +177,7 @@ export default [
   {
     name: "Formación",
     image: "img/formacion.jpg",
-    type: TYPE.SECTION,
+    type: TYPE.BLOCK,
     children: [
       {
         name: "CIEF",

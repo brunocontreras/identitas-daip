@@ -215,17 +215,19 @@ const readCourses = ({ path, parent }) => {
 const readTree = ({ tree, path, parent = null }) => {
   const directories = getDirectories(path);
   return tree.map(node => {
+    const isSection = node.type === TYPE.SECTION || node.type === TYPE.BLOCK;
     const exists = directories.some(x => isEqual(x, node.name));
-    const constructor = node.type === TYPE.SECTION ? newSection : newCourse;
+    const constructor = isSection ? newSection : newCourse;
     const newNode = constructor({ name: node.name, parent, disabled: !exists, image: node.image });
     if (exists) {
       const options = { path: join(path, node.name), parent: newNode };
       if (node.children) newNode.children = readTree({ tree: node.children, ...options });
-      else if (node.type === TYPE.SECTION) newNode.children = readCourses(options);
+      else if (isSection) newNode.children = readCourses(options);
       else if (node.type === TYPE.COURSE) newNode.children = readPresentations(options);
       newNode.disabled = newNode.children.every(x => x.disabled);
     }
     const enabledChildren = newNode.children.filter(x => !x.disabled);
+    if (node.type === TYPE.BLOCK) newNode.description = plurals(enabledChildren, "bloque", "bloques");
     if (node.type === TYPE.SECTION) newNode.description = plurals(enabledChildren, "curso", "cursos");
     if (node.type === TYPE.COURSE) newNode.description = plurals(enabledChildren, "presentación", "presentaciones");
     return newNode;
