@@ -1,4 +1,4 @@
-import { lstatSync, readdirSync } from "fs";
+import { lstatSync, readdirSync, existsSync } from "fs";
 import { join } from "path";
 
 const naturalCompare = (a, b) => {
@@ -23,6 +23,7 @@ const naturalCompare = (a, b) => {
 const isDirectory = path => lstatSync(path).isDirectory();
 const isFile = path => lstatSync(path).isFile();
 const isHiddenFile = name => /^\./.test(name);
+const exists = path => existsSync(path);
 const getDirectories = path =>
   readdirSync(path)
     .filter(name => isDirectory(join(path, name)))
@@ -50,6 +51,7 @@ export {
   naturalCompare,
   isDirectory,
   isFile,
+  exists,
   getDirectories,
   getFiles,
   protocolFile,

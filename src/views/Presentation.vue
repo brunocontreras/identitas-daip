@@ -68,7 +68,10 @@
     <div v-if="currentAudio" ref="audio" class="lyrics-wrapper" @click="toggleAudio">
       <app-cover :item="presentation" />
       <h1>{{ currentAudio.name }}</h1>
-      <pre class="lyrics">{{ currentAudio.lyrics }}</pre>
+      <div class="lyrics">
+        <pre v-if="currentAudio.lyrics" class="lyrics-text">{{ currentAudio.lyrics }}</pre>
+        <md-icon v-else class="icon-music">queue_music</md-icon>
+      </div>
       <vue-plyr ref="audioplayer">
         <audio :src="currentAudio.path" autoplay />
       </vue-plyr>
@@ -367,19 +370,34 @@ export default {
   }
 }
 .lyrics {
+  position: relative;
   border-radius: $border-radius;
   flex-grow: 1;
-  font-family: inherit;
   width: 75%;
   margin: 4rem auto;
-  font-size: 5rem;
-  line-height: 1.5;
   background-color: rgba(0, 0, 0, 0.6);
   color: #fff;
   overflow: auto;
   text-align: center;
   padding: 15rem 5rem;
   white-space: pre-wrap;
+}
+.lyrics-text {
+  font-family: inherit;
+  font-size: 5rem;
+  line-height: 1.5;
+}
+.icon-music {
+  position: absolute;
+  color: #fff !important;
+  width: 300px;
+  height: 300px;
+  font-size: 300px !important;
+  opacity: 0.25;
+  top: 50%;
+  left: 50%;
+  margin-top: -150px;
+  margin-left: -150px;
 }
 .fadeslide-enter-active,
 .fadeslide-leave-active {

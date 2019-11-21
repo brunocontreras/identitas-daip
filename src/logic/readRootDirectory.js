@@ -1,5 +1,5 @@
 import { join } from "path";
-import { getDirectories, getFiles, isFile, isEqual, extractName, protocolFile } from "./helpers";
+import { getDirectories, getFiles, isFile, exists, isEqual, extractName, protocolFile } from "./helpers";
 import identitasStructure from "../../identitas";
 import { TYPE } from "./type";
 import { plurals } from "@/logic/helpers";
@@ -85,9 +85,9 @@ const newAudio = ({ path, lyricsDirPath, name, parent }) => {
   const audio = { id: audioId++, path, name, parent, type: TYPE.AUDIO };
   const lyricsFile = `${name}.txt`;
   const lyricsPath = join(lyricsDirPath, lyricsFile);
-  if (isFile(lyricsPath)) {
+  if (exists(lyricsPath) && isFile(lyricsPath)) {
     audio.lyricsPath = lyricsPath;
-    audio.lyrics = readFileSync(lyricsPath, "utf8");
+    audio.lyrics = readFileSync(lyricsPath, "utf-8");
   }
   identitas.audios.push(audio);
   return audio;
