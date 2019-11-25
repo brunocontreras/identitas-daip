@@ -12,22 +12,22 @@ export default [
         type: TYPE.SECTION,
         children: [
           {
-            name: "1. Bases para elaborar un Proyecto Educativo personalizado",
+            name: "1. Bases para elaborar un proyecto educativo personalizado",
             image: "img/expertos/edep/1.jpg",
             type: TYPE.COURSE
           },
           {
-            name: "2. La calidad de la Educación Personalizada",
+            name: "2. La calidad de la educación personalizada",
             image: "img/expertos/edep/2.jpg",
             type: TYPE.COURSE
           },
           {
-            name: "3. La innovación y la Educación Personalizada DAIP",
+            name: "3. La innovación y la educación personalizada DAIP",
             image: "img/expertos/edep/3.jpg",
             type: TYPE.COURSE
           },
           {
-            name: "4. La Dirección DAIP: El gobierno de las personas",
+            name: "4. La dirección DAIP. El gobierno de las personas",
             image: "img/expertos/edep/4.jpg",
             type: TYPE.COURSE
           },
@@ -212,8 +212,8 @@ export default [
         type: TYPE.SECTION,
         children: [
           {
-            name: "Dirigir personas en las escuelas",
-            image: "img/formacion/cbep/dirigir_personas.jpg",
+            name: "Tutores DAIP",
+            image: "img/formacion/cbep/tutores_daip.jpg",
             type: TYPE.COURSE
           },
           {
@@ -222,8 +222,8 @@ export default [
             type: TYPE.COURSE
           },
           {
-            name: "La formación de los profesores encargados de curso",
-            image: "img/formacion/cbep/formacion_profesores_encargados.jpg",
+            name: "El profesor Jefe DAIP",
+            image: "img/formacion/cbep/profesor_jefe_daip.jpg",
             type: TYPE.COURSE
           },
           {
