@@ -95,7 +95,7 @@ const newAudio = ({ path, lyricsDirPath, name, parent }) => {
 
 const readAudioDir = ({ path, lyricsDirPath, parent }) => {
   const files = getFiles(path);
-  if (files) {
+  if (files.length > 0) {
     return files.map(name => {
       const audio = newAudio({
         path: protocolFile(join(path, name)),
@@ -110,7 +110,7 @@ const readAudioDir = ({ path, lyricsDirPath, parent }) => {
 
 const readVideoDir = ({ path, parent }) => {
   const files = getFiles(path);
-  if (files) {
+  if (files.length > 0) {
     return files.map(name => {
       const video = newVideo({
         path: protocolFile(join(path, name)),
@@ -131,7 +131,7 @@ const readVideoDir = ({ path, parent }) => {
 
 const readSlides = ({ path, name }) => {
   const files = getFiles(path);
-  if (!files) warningNoSlides(name);
+  if (files.length === 0) warningNoSlides(name);
   else return files.map(name => protocolFile(join(path, name)));
 };
 
@@ -163,13 +163,29 @@ const readPresentation = ({ path, name, parent }) => {
   }
 };
 
+const existsPresentation = ({ path }) => {
+  if (!getDirectories(path)) return false;
+  const slidesPath = join(path, PRESENTATION_DIRECTORIES.SLIDES);
+  const existsFolder = exists(slidesPath);
+  const images = getFiles(slidesPath);
+  if (!existsFolder || images.length === 0) return false;
+  return true;
+};
+
 const readPresentations = ({ path, parent }) => {
   const directories = getDirectories(path);
   if (!directories) {
     warningNoContent(parent.name);
     return [];
   } else {
-    return directories.map(name => readPresentation({ path: join(path, name), name, parent }));
+    const presentations = [];
+    directories.forEach(name => {
+      const presentationPath = join(path, name);
+      if (existsPresentation({ path: presentationPath })) {
+        presentations.push(readPresentation({ path: presentationPath, name, parent }));
+      }
+    });
+    return presentations;
   }
 };
 

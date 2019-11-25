@@ -26,11 +26,11 @@ const isHiddenFile = name => /^\./.test(name);
 const exists = path => existsSync(path);
 const getDirectories = path =>
   readdirSync(path)
-    .filter(name => isDirectory(join(path, name)))
+    .filter(name => exists(join(path, name)) && isDirectory(join(path, name)))
     .sort(naturalCompare);
 const getFiles = path =>
   readdirSync(path)
-    .filter(name => isFile(join(path, name)) && !isHiddenFile(name))
+    .filter(name => exists(join(path, name)) && isFile(join(path, name)) && !isHiddenFile(name))
     .sort(naturalCompare);
 
 const protocolFile = file => `file://${file}`;
