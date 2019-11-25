@@ -237,6 +237,12 @@ export default [
             type: TYPE.COURSE
           }
         ]
+      },
+      {
+        name: "Otros cursos",
+        image: "img/formacion/otros_cursos.jpg",
+        type: TYPE.SECTION,
+        children: []
       }
     ]
   },
