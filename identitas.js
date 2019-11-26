@@ -242,7 +242,13 @@ export default [
         name: "Otros cursos",
         image: "img/formacion/otros_cursos.jpg",
         type: TYPE.SECTION,
-        children: []
+        children: [
+          {
+            name: "Clausuras DAIP",
+            image: "img/formacion/otroscursos/clausuras_daip.jpg",
+            type: TYPE.COURSE
+          }
+        ]
       }
     ]
   },
