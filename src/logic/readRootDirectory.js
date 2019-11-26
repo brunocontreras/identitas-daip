@@ -73,6 +73,9 @@ const newCourse = ({ name, parent, disabled, image }) => {
 };
 const newPresentation = ({ path, name, parent }) => {
   const presentation = { id: presentationId++, path, name, parent, type: TYPE.PRESENTATION };
+  presentation.audios = [];
+  presentation.lyrics = [];
+  presentation.videos = [];
   identitas.presentations.push(presentation);
   return presentation;
 };
@@ -95,38 +98,36 @@ const newAudio = ({ path, lyricsDirPath, name, parent }) => {
 
 const readAudioDir = ({ path, lyricsDirPath, parent }) => {
   const files = getFiles(path);
-  if (files.length > 0) {
-    return files.map(name => {
-      const audio = newAudio({
-        path: protocolFile(join(path, name)),
-        lyricsDirPath,
-        name: extractName(name),
-        parent
-      });
-      return audio;
+  if (files.length === 0) return [];
+  return files.map(name => {
+    const audio = newAudio({
+      path: protocolFile(join(path, name)),
+      lyricsDirPath,
+      name: extractName(name),
+      parent
     });
-  }
+    return audio;
+  });
 };
 
 const readVideoDir = ({ path, parent }) => {
   const files = getFiles(path);
-  if (files.length > 0) {
-    return files.map(name => {
-      const video = newVideo({
-        path: protocolFile(join(path, name)),
-        name: extractName(name),
-        parent
-      });
-      // ffprobe(join(path, name), { path: ffprobeStatic.path })
-      //   .then(info => {
-      //     video.duration = parseToMMSS(info.streams[0].duration)
-      //   })
-      //   .catch(err => {
-      //     console.error(err)
-      //   })
-      return video;
+  if (files.length === 0) return [];
+  return files.map(name => {
+    const video = newVideo({
+      path: protocolFile(join(path, name)),
+      name: extractName(name),
+      parent
     });
-  }
+    // ffprobe(join(path, name), { path: ffprobeStatic.path })
+    //   .then(info => {
+    //     video.duration = parseToMMSS(info.streams[0].duration)
+    //   })
+    //   .catch(err => {
+    //     console.error(err)
+    //   })
+    return video;
+  });
 };
 
 const readSlides = ({ path, name }) => {
