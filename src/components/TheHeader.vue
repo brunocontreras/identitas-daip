@@ -61,7 +61,7 @@ export default {
     },
     update() {
       // if (process.platform === "darwin") {
-      shell.openExternal("https://identitas.netlify.com/");
+      shell.openExternal("https://identitasdaip.netlify.com/");
       // } else {
       //   ipcRenderer.send("update");
       // }

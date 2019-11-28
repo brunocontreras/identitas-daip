@@ -5,7 +5,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       builderOptions: {
-        productName: "identitas",
+        productName: "identitas-daip",
         appId: "com.educarpersonas"
       }
     }
