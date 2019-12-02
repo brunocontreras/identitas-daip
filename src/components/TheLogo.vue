@@ -1,6 +1,6 @@
 <template>
   <router-link to="/" class="applogo" @mouseenter.native="hover = true" @mouseleave.native="hover = false">
-    <app-logo width="100px" :white="hover" />
+    <app-logo class="logo" :white="hover" />
   </router-link>
 </template>
 
@@ -15,3 +15,13 @@ export default {
   })
 };
 </script>
+
+<style lang="scss" scoped>
+.logo {
+  width: 80px;
+  top: 0 !important;
+  path {
+    fill: #000;
+  }
+}
+</style>

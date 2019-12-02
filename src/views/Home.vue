@@ -2,7 +2,7 @@
   <div class="home">
     <app-video-background @loaded="onVideoLoaded" />
     <app-select-folder :is-active="showFolderSelecter" />
-    <app-logo class="logo" :white="true" />
+    <app-logo class="logo" white />
     <div v-if="data" class="data-container">
       <app-card
         v-for="node in data.tree"
