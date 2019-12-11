@@ -43,7 +43,7 @@
           <app-progress :progress="presentationProgress" />
           <transition name="fadeslide">
             <template v-for="(slide, i) in slides">
-              <img v-if="i === currentSlide" :key="i" :src="slide" />
+              <img v-if="i === currentSlide" :key="i" :src="slide" class="image" />
             </template>
           </transition>
           <div class="icon-fullscreen-wrapper" @click.stop="toggleFullScreen">
@@ -302,6 +302,9 @@ export default {
       height: 100%;
     }
   }
+}
+.image {
+  width: 100%;
 }
 .icon-fullscreen-wrapper {
   cursor: pointer;
