@@ -47,7 +47,7 @@ const plurals = (array, singular, plural) => {
   } else return `0 ${plural}`;
 };
 
-const sort = collection => {
+const alphabeticalSort = collection => {
   return collection.sort((a, b) => {
     if (a.name > b.name) return 1;
     else if (a.name < b.name) return -1;
@@ -69,5 +69,5 @@ export {
   removeOrder,
   extractName,
   plurals,
-  sort
+  alphabeticalSort
 };
