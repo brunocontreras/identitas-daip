@@ -14,7 +14,6 @@ export default new Vuex.Store({
   getters: {
     allVideos: state => {
       const dictionary = {};
-      debugger;
       state.data.videos.sort(propertyNameCompare);
       for (let i = 0, l = state.data.videos.length; i < l; i++) {
         const video = state.data.videos[i];
