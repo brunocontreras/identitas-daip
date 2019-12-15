@@ -4,10 +4,12 @@ import { join } from "path";
 const naturalCompare = (a, b) => {
   let ax = [];
   let bx = [];
-  a.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
+  let aText = a.toString();
+  let bText = b.toString();
+  aText.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
     ax.push([$1 || Infinity, $2 || ""]);
   });
-  b.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
+  bText.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
     bx.push([$1 || Infinity, $2 || ""]);
   });
 
@@ -18,6 +20,12 @@ const naturalCompare = (a, b) => {
     if (nn) return nn;
   }
   return ax.length - bx.length;
+};
+
+const propertyNameCompare = (a, b) => {
+  if (a.name > b.name) return 1;
+  else if (a.name < b.name) return -1;
+  return 0;
 };
 
 const isDirectory = path => lstatSync(path).isDirectory();
@@ -49,6 +57,7 @@ const plurals = (array, singular, plural) => {
 
 export {
   naturalCompare,
+  propertyNameCompare,
   isDirectory,
   isFile,
   exists,
