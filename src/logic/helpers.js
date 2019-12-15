@@ -47,14 +47,6 @@ const plurals = (array, singular, plural) => {
   } else return `0 ${plural}`;
 };
 
-const alphabeticalSort = collection => {
-  return collection.sort((a, b) => {
-    if (a.name > b.name) return 1;
-    else if (a.name < b.name) return -1;
-    return 0;
-  });
-};
-
 export {
   naturalCompare,
   isDirectory,
@@ -68,6 +60,5 @@ export {
   removeExtension,
   removeOrder,
   extractName,
-  plurals,
-  alphabeticalSort
+  plurals
 };

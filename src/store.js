@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import readRootDirectory from "@/logic/readRootDirectory";
-import { alphabeticalSort } from "@/logic/helpers";
+import { naturalCompare } from "@/logic/helpers";
 
 Vue.use(Vuex);
 
@@ -14,7 +14,7 @@ export default new Vuex.Store({
   getters: {
     allVideos: state => {
       const dictionary = {};
-      alphabeticalSort(state.data.videos);
+      state.data.videos.sort(naturalCompare);
       for (let i = 0, l = state.data.videos.length; i < l; i++) {
         const video = state.data.videos[i];
         if (!dictionary[video.name]) dictionary[video.name] = video;
@@ -23,7 +23,7 @@ export default new Vuex.Store({
     },
     allAudios: state => {
       const dictionary = {};
-      alphabeticalSort(state.data.audios);
+      state.data.audios.sort(naturalCompare);
       for (let i = 0, l = state.data.audios.length; i < l; i++) {
         const audio = state.data.audios[i];
         if (!dictionary[audio.name]) dictionary[audio.name] = audio;
