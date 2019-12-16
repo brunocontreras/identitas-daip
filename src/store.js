@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import readRootDirectory from "@/logic/readRootDirectory";
+import { propertyNameCompare } from "@/logic/helpers";
 
 Vue.use(Vuex);
 
@@ -9,6 +10,26 @@ export default new Vuex.Store({
     data: null,
     current: null,
     log: null
+  },
+  getters: {
+    allVideos: state => {
+      const dictionary = {};
+      state.data.videos.sort(propertyNameCompare);
+      for (let i = 0, l = state.data.videos.length; i < l; i++) {
+        const video = state.data.videos[i];
+        if (!dictionary[video.name]) dictionary[video.name] = video;
+      }
+      return Object.values(dictionary);
+    },
+    allAudios: state => {
+      const dictionary = {};
+      state.data.audios.sort(propertyNameCompare);
+      for (let i = 0, l = state.data.audios.length; i < l; i++) {
+        const audio = state.data.audios[i];
+        if (!dictionary[audio.name]) dictionary[audio.name] = audio;
+      }
+      return Object.values(dictionary);
+    }
   },
   mutations: {
     SET_DATA: (state, data) => {

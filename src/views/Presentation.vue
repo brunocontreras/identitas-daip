@@ -10,9 +10,8 @@
         </div>
       </md-tab>
       <md-tab id="tab-videos" class="tab-content" :md-label="tabVideosName" md-icon="movie">
-        <md-switch v-model="showAllVideos" class="md-primary">Mostrar todos los vídeos / {{ data.videos.length }}</md-switch>
-        <md-progress-spinner v-if="fetchingAllVideos" class="md-primary spinner" :md-diameter="30" :md-stroke="3" md-mode="indeterminate" />
-        <template v-else-if="videos.length">
+        <md-switch v-model="showAllVideos" class="md-primary">Mostrar todos los vídeos / {{ allVideos.length }}</md-switch>
+        <template v-if="videos.length">
           <app-card
             v-for="video in videos"
             :key="video.path"
@@ -25,8 +24,7 @@
       </md-tab>
       <md-tab id="tab-audios" class="tab-content" :md-label="tabAudiosName" md-icon="queue_music">
         <md-switch v-model="showAllAudios" class="md-primary">Mostrar todos los audios / {{ data.audios.length }}</md-switch>
-        <md-progress-spinner v-if="fetchingAllAudios" class="md-primary spinner" :md-diameter="30" :md-stroke="3" md-mode="indeterminate" />
-        <template v-else-if="audios.length">
+        <template v-if="audios.length">
           <app-card
             v-for="audio in audios"
             :key="audio.path"
@@ -45,7 +43,7 @@
           <app-progress :progress="presentationProgress" />
           <transition name="fadeslide">
             <template v-for="(slide, i) in slides">
-              <img v-if="i === currentSlide" :key="i" :src="slide" />
+              <img v-if="i === currentSlide" :key="i" :src="slide" class="image" />
             </template>
           </transition>
           <div class="icon-fullscreen-wrapper" @click.stop="toggleFullScreen">
@@ -80,7 +78,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 import AppCover from "@/components/AppCover";
 import AppCard from "@/components/AppCard";
 import AppProgress from "@/components/AppProgress";
@@ -103,15 +101,14 @@ export default {
     videos: [],
     currentVideo: null,
     showAllVideos: false,
-    fetchingAllVideos: false,
 
     audios: [],
     currentAudio: null,
-    showAllAudios: false,
-    fetchingAllAudios: false
+    showAllAudios: false
   }),
   computed: {
     ...mapState(["data"]),
+    ...mapGetters(["allVideos", "allAudios"]),
     presentationProgress() {
       return this.currentSlide / (this.slides.length - 1);
     },
@@ -142,17 +139,7 @@ export default {
     showAllVideos: {
       immediate: true,
       handler() {
-        if (this.showAllVideos) {
-          this.fetchingAllVideos = true;
-          new Promise(resolve => {
-            setTimeout(() => resolve(this.sort(this.data.videos)), 100);
-          }).then(videos => {
-            this.videos = videos;
-            this.fetchingAllVideos = false;
-          });
-        } else {
-          this.videos = this.presentation.videos;
-        }
+        this.videos = this.showAllVideos ? this.allVideos : this.presentation.videos;
       }
     },
     currentVideo() {
@@ -165,17 +152,7 @@ export default {
     showAllAudios: {
       immediate: true,
       handler() {
-        if (this.showAllAudios) {
-          this.fetchingAllAudios = true;
-          new Promise(resolve => {
-            setTimeout(() => resolve(this.sort(this.data.audios)), 100);
-          }).then(audios => {
-            this.audios = audios;
-            this.fetchingAllAudios = false;
-          });
-        } else {
-          this.audios = this.presentation.audios;
-        }
+        this.audios = this.showAllAudios ? this.allAudios : this.presentation.audios;
       }
     },
     currentAudio() {
@@ -218,13 +195,6 @@ export default {
     toggleFullScreen() {
       this.fullScreen = !this.fullScreen;
       this.fullScreen ? this.$refs.slider.webkitRequestFullScreen() : document.webkitExitFullscreen();
-    },
-    sort(collection) {
-      return collection.sort((a, b) => {
-        if (a.name > b.name) return 1;
-        else if (a.name < b.name) return -1;
-        return 0;
-      });
     },
     getBreadcrumb(item) {
       const breadcrumb = [];
@@ -332,6 +302,9 @@ export default {
       height: 100%;
     }
   }
+}
+.image {
+  width: 100%;
 }
 .icon-fullscreen-wrapper {
   cursor: pointer;
