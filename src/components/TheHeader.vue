@@ -21,6 +21,10 @@
         </button>
         <md-tooltip md-direction="bottom">Seleccionar carpeta</md-tooltip>
       </div>
+      <button class="tool-button" @click="openInfo">
+        <md-icon>info</md-icon>
+        <md-tooltip md-direction="bottom">Info</md-tooltip>
+      </button>
     </div>
   </header>
 </template>
@@ -65,6 +69,9 @@ export default {
       // } else {
       //   ipcRenderer.send("update");
       // }
+    },
+    openInfo() {
+      shell.openExternal("https://identitas.netlify.com/carpetas");
     }
   }
 };
