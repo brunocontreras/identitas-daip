@@ -280,7 +280,7 @@ export default {
 .slider {
   border-radius: $border-radius;
   align-self: center;
-  width: 90%;
+  max-width: 90%;
   overflow: hidden;
   position: relative;
   user-select: none;
@@ -300,6 +300,7 @@ export default {
     }
     img {
       height: 100%;
+      width: auto;
     }
   }
 }
