@@ -1,4 +1,4 @@
 import Vue from "vue";
 import VuePlyr from "vue-plyr";
-import "vue-plyr/dist/vue-plyr.css";
+import "plyr/dist/plyr.css";
 Vue.use(VuePlyr);
