@@ -146,6 +146,7 @@ export default {
       if (this.currentVideo) {
         this.$nextTick(() => {
           this.$refs.videoplayer.player.fullscreen.enter();
+          this.createCloseButton(this.$refs.videoplayer.$el.children[0], this.videoExitFullScreen);
         });
       }
     },
@@ -159,6 +160,7 @@ export default {
       if (this.currentAudio) {
         this.$nextTick(() => {
           this.$refs.audio.webkitRequestFullScreen();
+          this.createCloseButton(this.$refs.audio, this.audioExitFullScreen);
         });
       }
     }
@@ -208,8 +210,22 @@ export default {
     videoExitFullScreen() {
       this.currentVideo = null;
     },
+    audioExitFullScreen() {
+      this.currentAudio = null;
+      document.webkitExitFullscreen();
+    },
     toggleAudio() {
       this.$refs.audioplayer.player.togglePlay();
+    },
+    createCloseButton(el, callback) {
+      const button = document.createElement("button");
+      button.innerText = "X";
+      button.classList.add("closefullscreen");
+      button.addEventListener("click", e => {
+        e.stopPropagation();
+        callback();
+      });
+      el.appendChild(button);
     }
   }
 };
@@ -338,7 +354,7 @@ export default {
 .lyrics-wrapper {
   display: none;
   &:fullscreen {
-    padding-top: 4rem;
+    padding-top: 7rem;
     display: flex;
     flex-direction: column;
   }
@@ -381,5 +397,30 @@ export default {
 .fadeslide-leave-to {
   opacity: 0.5;
   position: absolute;
+}
+</style>
+
+<style lang="scss">
+.closefullscreen {
+  border: none;
+  display: block;
+  box-shadow: 0 0 3px #fff;
+  border-radius: 50%;
+  color: #fff;
+  position: fixed;
+  width: 54px !important;
+  height: 54px;
+  background-color: rgba(0, 0, 0, 0.75);
+  left: 50%;
+  margin-left: -27px;
+  top: 3px;
+  opacity: 0.5;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>
