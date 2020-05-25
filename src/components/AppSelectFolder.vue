@@ -5,7 +5,9 @@
       md-label="Añadir contenido"
       md-description="Para poder mostrar las presentaciones debes seleccionar la carpeta con el contenido."
     >
-      <md-button class="md-raised md-primary" @click="selectDirectory">Seleccionar carpeta</md-button>
+      <md-button class="md-raised md-primary" :disabled="loading" @click="selectDirectory">
+        {{ loading ? "Cargando..." : "Seleccionar carpeta" }}
+      </md-button>
     </md-empty-state>
   </md-dialog>
 </template>
@@ -17,13 +19,20 @@ export default {
   props: {
     isActive: Boolean
   },
+  data: () => ({
+    loading: false
+  }),
   methods: {
     ...mapActions(["READ_ROOT_DIRECTORY"]),
     selectedDirectory(paths) {
       if (paths !== undefined) {
         const dir = paths[0];
         localStorage.setItem("root", dir);
-        this.READ_ROOT_DIRECTORY(dir);
+        this.loading = true;
+        setTimeout(() => {
+          this.READ_ROOT_DIRECTORY(dir);
+          this.loading = false;
+        }, 200);
       }
     },
     selectDirectory() {
