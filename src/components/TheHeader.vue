@@ -25,6 +25,15 @@
         <md-icon>info</md-icon>
         <md-tooltip md-direction="bottom">Info</md-tooltip>
       </button>
+      <!-- <button v-if="log && log.length > 0" class="tool-button" @click="showReport = true">
+        <md-icon>report</md-icon>
+        <md-tooltip md-direction="bottom">Errores</md-tooltip>
+        <md-dialog :md-active="showReport" :md-close-on-esc="false" :md-click-outside-to-close="false" :md-backdrop="false">
+          <ul>
+            <li v-for="(message, i) in log" :key="i">{{ message }}</li>
+          </ul>
+        </md-dialog>
+      </button> -->
     </div>
   </header>
 </template>
@@ -46,7 +55,7 @@ export default {
     updateAvailable: false
   }),
   computed: {
-    ...mapState(["data", "current"])
+    ...mapState(["data", "current", "log"])
   },
   created() {
     // ipcRenderer.on("downloaded", () => {

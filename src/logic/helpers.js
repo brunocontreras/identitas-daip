@@ -40,6 +40,11 @@ const getFiles = path =>
   readdirSync(path)
     .filter(name => exists(join(path, name)) && isFile(join(path, name)) && !isHiddenFile(name))
     .sort(naturalCompare);
+const resolve = (path, name) => {
+  const directories = getDirectories(path);
+  const dirName = directories.find(x => isEqual(x, name));
+  return join(path, dirName);
+};
 
 const protocolFile = file => `file://${file}`;
 
@@ -63,6 +68,7 @@ export {
   exists,
   getDirectories,
   getFiles,
+  resolve,
   protocolFile,
   normalize,
   isEqual,
